@@ -16,18 +16,13 @@ const SortableList = SortableContainer(({items}) => {
 });
 
 export default class SortableComponent extends React.Component {
-	constructor(){
-		super();
+	constructor(props){
+		super(props);
+		console.log(props.items)
   		this.state = {
-  			options: [],
-    		items: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6'],
+  			startDate: '',
+    		items: props.items,
   		};
-  	}
-
-  	selectItems(item){
-  		console.log(item)
-  		let newItemsList = this.state.items.push(item)
-  		console.log(newItemsList)
   	}
 
   	onSortEnd = ({oldIndex, newIndex}) => {
@@ -35,13 +30,11 @@ export default class SortableComponent extends React.Component {
       	items: arrayMove(this.state.items, oldIndex, newIndex),
     	});
   	};
+
   render() {
+  	console.log(this.state.items)
     return (
-    	<div>
-	    	<label>Item 1</label>
-	    		<input type="checkbox" value="Item 1" onClick={e => this.selectItems(e.target.value)}/>
-	    	<label>Item 2</label>
-	    		<input type="checkbox" value="Item 2"/>
+    	<div className="dragBox">
 	    	<SortableList axis={'x'} items={this.state.items} onSortEnd={this.onSortEnd} />
     	</div>
     )

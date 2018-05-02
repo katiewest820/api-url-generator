@@ -1,9 +1,17 @@
-li{
-	list-style-type: none;
+.dragBox li{
+	list-style-type: none !important;
     width: fit-content;
+    padding: 10px;
+    border: dotted 1px grey;
+    align-self: center;
+    justify-self: center;
 }
 
-ul{
+.dragBox ul{
 	display: grid;
-	grid-template-columns: repeat(6, 1fr);
+	grid-template-columns: repeat(auto-fit, 100px);
+	border: solid 2px grey;
+	width: 95%;
+	margin: auto;
+	min-height: 100px;
 }
