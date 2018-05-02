@@ -1,0 +1,9 @@
+li{
+	list-style-type: none;
+    width: fit-content;
+}
+
+ul{
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+}

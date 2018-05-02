@@ -1,29 +1,41 @@
 import React from 'react';
 import './main.css'
+import 'react-tabs/style/react-tabs.css';
+import ReportBuild from '../reportBuild/reportBuild';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 export default class Main extends React.Component{
-	constructor(){
-		super();
-		this.state = {
-			apiVersion: '',
-			reportType: ''
-		}
-	}
 
 	render(){
 		return(
-			<div className="mainDiv">
-				<select>
-					<option></option>
-					<option>V1</option>
-					<option>V3</option>
-				</select>
-				<select>
-					<option></option>
-					<option>Cost Report</option>
-					<option>Utilization Report</option>
-				</select>
-			</div>
+			<Tabs>
+				<TabList>
+					<Tab>
+						Documentation
+					</Tab>
+					<Tab>
+						Reports
+					</Tab>
+					<Tab>
+						Views
+					</Tab>
+					<Tab>
+						Users
+					</Tab>
+				</TabList>
+				<TabPanel>
+					<p>Docs tab</p>
+				</TabPanel>
+				<TabPanel>
+					<ReportBuild/>
+				</TabPanel>
+				<TabPanel>
+					<p>view tab</p>
+				</TabPanel>
+				<TabPanel>
+					<p>user tab</p>
+				</TabPanel>
+			</Tabs>
 		)
 	}
 }
