@@ -9,7 +9,7 @@
 
 .dragBox ul{
 	display: grid;
-	grid-template-columns: repeat(auto-fit, 100px);
+	grid-template-columns: repeat(auto-fill, minmax(150px, max-content));
 	border: solid 2px grey;
 	width: 95%;
 	margin: auto;

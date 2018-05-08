@@ -6,6 +6,7 @@ import './dragFrom.css';
 const SortableItem = SortableElement(({value}) => <li>{value}</li>);
 
 const SortableList = SortableContainer(({items}) => {
+  console.log(items)
   return (
     <ul>
       {items.map((value, index) => (
@@ -18,7 +19,7 @@ const SortableList = SortableContainer(({items}) => {
 export default class SortableComponent extends React.Component {
 	constructor(props){
 		super(props);
-		console.log(props.items)
+		console.log(props)
   		this.state = {
   			startDate: '',
     		items: props.items,
@@ -27,15 +28,19 @@ export default class SortableComponent extends React.Component {
 
   	onSortEnd = ({oldIndex, newIndex}) => {
     	this.setState({
-      	items: arrayMove(this.state.items, oldIndex, newIndex),
+      	items: arrayMove(this.props.items, oldIndex, newIndex),
     	});
+      this.props.passItemBackToParent(this.state.items)
   	};
 
+
+
   render() {
-  	console.log(this.state.items)
+  	console.log(this.state)
+    console.log(this.props)
     return (
     	<div className="dragBox">
-	    	<SortableList axis={'x'} items={this.state.items} onSortEnd={this.onSortEnd} />
+	    	<SortableList axis={'x'} items={this.props.items} onSortEnd={this.onSortEnd}/>
     	</div>
     )
   }
