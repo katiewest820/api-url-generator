@@ -3,18 +3,32 @@ import {render} from 'react-dom';
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 import './dragFrom.css';
 
-const SortableItem = SortableElement(({value}) => <li>{value}</li>);
+// const SortableItem = SortableElement(({idx, value, onRemove}) => {
+//     return (
+//       <li>
+//         {value}
+//         <button key={`input-${value}`}> Remove </button>
+//       </li>
+//     );
+// });
 
-const SortableList = SortableContainer(({items}) => {
-  console.log(items)
-  return (
-    <ul>
-      {items.map((value, index) => (
-        <SortableItem key={`item-${index}`} index={index} value={value} />
-      ))}
-    </ul>
-  );
-});
+// const SortableList = SortableContainer(({items, onRemove}) => {
+//   console.log(items)
+//   return (
+//     <ul>
+//       {items.map((value, index, onRemove) => (
+        
+//           <SortableItem 
+//             key={`item-${index}`} 
+//             index={index} 
+//             value={value}
+//             onRemove={onRemove} 
+//             idx={index}
+//           />
+//       ))}
+//     </ul>
+//   );
+// });
 
 export default class SortableComponent extends React.Component {
 	constructor(props){
@@ -23,24 +37,72 @@ export default class SortableComponent extends React.Component {
   		this.state = {
   			startDate: '',
     		items: props.items,
+        indexVal: props.indexVal
   		};
   	}
 
   	onSortEnd = ({oldIndex, newIndex}) => {
     	this.setState({
       	items: arrayMove(this.props.items, oldIndex, newIndex),
+        indexVal: arrayMove(this.state.indexVal, oldIndex, newIndex)
     	});
+      
       this.props.passItemBackToParent(this.state.items)
   	};
 
 
 
+    onRemove(index){
+      console.log(index)
+      this.state.items.splice(index,index+1);
+      this.state.indexVal.splice(index, index+1);
+     
+      
+      this.setState({
+          items : this.state.items, 
+          indexVal: this.state.indexVal
+      });
+      console.log(this.state.items)
+      console.log(this.state.indexVal)
+      this.props.passItemBackToParent(this.state.items)
+    }
+
   render() {
+    console.log(this.state.indexVal)
+  
+    let SortableItem = SortableElement(({value, onRemove}) => {
+      let matchingIndex = this.state.items.findIndex(index => index == value)
+      
+
+      return (
+        <li>
+          {value}
+          <button key={`input-${value}`} onClick={() => this.onRemove(matchingIndex)}> Remove </button>
+        </li>
+      );
+    });
+
+    let SortableList = SortableContainer(({items, onRemove}) => {
+    console.log(items)
+    return (
+      <ul>
+        {items.map((value, index, onRemove) => (
+          
+            <SortableItem 
+              key={`item-${index}`} 
+              index={index} 
+              value={value}
+              onClick={() => onRemove(index)} 
+            />
+        ))}
+      </ul>
+    );
+  });
   	console.log(this.state)
     console.log(this.props)
     return (
     	<div className="dragBox">
-	    	<SortableList axis={'x'} items={this.props.items} onSortEnd={this.onSortEnd}/>
+	    	<SortableList axis={'x'} items={this.props.items} onSortEnd={this.onSortEnd} onRemove={(index) => this.remove(index)}/>
     	</div>
     )
   }

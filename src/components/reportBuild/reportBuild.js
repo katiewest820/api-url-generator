@@ -24,7 +24,6 @@ export default class ReportBuild extends React.Component{
 						<option value="utilization" onClick={e => this.setState({reportType: 'util'})}>Utilization Report</option>
 					</select>
 					<CostReport/>
-					
 				</div>
 			)
 		} else {
@@ -36,7 +35,6 @@ export default class ReportBuild extends React.Component{
 						<option value="utilization" onClick={e => this.setState({reportType: 'util'})}>Utilization Report</option>
 					</select>
 					<UtilReport/>
-					
 				</div>
 			)
 		}

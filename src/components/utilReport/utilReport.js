@@ -9,8 +9,11 @@ export default class UtilReport extends React.Component{
 			startDate: '',
 			endDate: '',
 			props: [],
+			indexVal: [],
 			metrics_dimensions: [],
-			generatedUrl: ''
+			generatedUrl: '',
+			parameter: '',
+			parameterInput: ''
 			
 		}
 	}
@@ -29,6 +32,16 @@ export default class UtilReport extends React.Component{
   		}
   		this.state.props.push(`${key}:${value}`);
   		let newItemsList = this.state.props;
+
+  		let nextIndexVal;
+    	if(this.state.props.length > 0){
+    		let nextIndexVal = this.state.props.length -1;
+      		console.log(nextIndexVal)
+      		this.state.indexVal.push(nextIndexVal)
+      		console.log(this.state.indexVal)
+      		console.log('hiiiiiiii')
+      	}
+
   		//this.setState({startDate: ''});
   		this.passItemBackToParent(this.state.props)
   	}
@@ -55,19 +68,37 @@ export default class UtilReport extends React.Component{
   		result = `${this.state.apiVersion}/${metrics_dimensions}`
   		console.log(result)
   		this.setState({generatedUrl: result})
+  	}
 
+  	addParamenter(){
+  		console.log(this.state.parameter)
+  		console.log(this.state.parameterInput)
   	}
 
 	render(){
 		console.log(this.state.props)
 		return(
 			<div className="reportBuildDiv">
-				<label>Start Date</label>
-	    		<input type="date" onChange={e => this.setState({startDate: e.target.value})}/>
-	    		<button onClick={e => this.selectItems("start_date", this.state.startDate)}>Add</button>
-	    		<label>end Date</label>
-	    		<input type="date" onChange={e => this.setState({endDate: e.target.value})}/>
-	    		<button onClick={e => this.selectItems("end_date", this.state.endDate)}>Add</button>
+				<div>
+					<label>Start Date</label>
+		    		<input type="date" onChange={e => this.setState({startDate: e.target.value})}/>
+		    		<button onClick={e => this.selectItems("start_date", this.state.startDate)}>Add</button>
+		    		<label>end Date</label>
+		    		<input type="date" onChange={e => this.setState({endDate: e.target.value})}/>
+		    		<button onClick={e => this.selectItems("end_date", this.state.endDate)}>Add</button>
+	    		</div>
+	    		<div>
+	    			<select value={this.state.parameter} onChange={e => this.setState({parameter: e.target.value})}>
+	    				<option></option>
+	    				<option value="sort_by" onClick={e => this.setState({parameter: e.target.value})}>Sort By</option>
+	    				<option value="order" onClick={e => this.setState({parameter: e.target.value})}>Order</option>
+	    				<option value="ofset" onClick={e => this.setState({parameter: e.target.value})}>Ofset</option>
+	    				<option value="max_results" onClick={e => this.setState({parameter: e.target.value})}>Max Results</option>
+	    				<option value="chart" onClick={e => this.setState({parameter: e.target.value})}>Chart</option>
+	    			</select>
+	    			<input type="text" onChange={e => this.setState({parameterInput: e.target.value})}/>
+	    			<button onClick={this.addParamenter.bind(this)}>Add</button>
+	    		</div>
 	    		<div className="DimensionsMetrics">
 		    		<div>
 			    		<h2>Dimensions</h2>	
@@ -117,7 +148,7 @@ export default class UtilReport extends React.Component{
 					    		<input type="checkbox" value="instance_family" onClick={e => this.selectItems("Metric", e.target.value)}/>
 					</div>
 				</div>
-				<DragFrom items={this.state.props} passItemBackToParent={this.passItemBackToParent.bind(this)}/>
+				<DragFrom items={this.state.props} indexVal={this.state.indexVal} passItemBackToParent={this.passItemBackToParent.bind(this)}/>
 				<p>{this.state.generatedUrl}</p>
 			</div>
 		)
