@@ -54,8 +54,8 @@ export default class SortableComponent extends React.Component {
 
     onRemove(index){
       console.log(index)
-      this.state.items.splice(index,index+1);
-      this.state.indexVal.splice(index, index+1);
+      this.state.items.splice(index,1);
+      this.state.indexVal.splice(index, 1);
      
       
       this.setState({

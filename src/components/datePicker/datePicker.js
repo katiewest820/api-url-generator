@@ -31,12 +31,14 @@ const dateRanges = [
 ];
 
 export default class DatePicker extends React.Component{
-	constructor(){
-		super();
+
+	constructor(props){
+		super(props);
 		this.state = {
 			value: null,
 			states: ''
 		}
+		console.log(this.props)
 	}
 
   handleSelect(range, states) {
@@ -48,6 +50,7 @@ export default class DatePicker extends React.Component{
       states: states,
     });
     console.log(this.state)
+    this.props.addDates(range.start, range.end)
   }
 
   render() {
