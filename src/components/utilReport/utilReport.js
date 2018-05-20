@@ -1,5 +1,6 @@
 import React from 'react';
 import DragFrom from '../dragFrom/dragFrom';
+import DatePicker from '../datePicker/datePicker';
 
 export default class UtilReport extends React.Component{
 	constructor(){
@@ -73,6 +74,7 @@ export default class UtilReport extends React.Component{
   	addParamenter(){
   		console.log(this.state.parameter)
   		console.log(this.state.parameterInput)
+  		this.selectItems(this.state.parameter, this.state.parameterInput)
   	}
 
 	render(){
@@ -87,6 +89,7 @@ export default class UtilReport extends React.Component{
 		    		<input type="date" onChange={e => this.setState({endDate: e.target.value})}/>
 		    		<button onClick={e => this.selectItems("end_date", this.state.endDate)}>Add</button>
 	    		</div>
+	    		<DatePicker/>
 	    		<div>
 	    			<select value={this.state.parameter} onChange={e => this.setState({parameter: e.target.value})}>
 	    				<option></option>
