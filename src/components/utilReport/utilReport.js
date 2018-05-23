@@ -7,7 +7,7 @@ export default class UtilReport extends React.Component{
 	constructor(){
 		super();
 		this.state = {
-			apiVersion: 'https://app.cloudability.com/api/1/reporting/cost/run',
+			apiVersion: 'https://app.cloudability.com/api/1/reporting/run', 
 			props: [],
 			indexVal: [],
 			//metrics_dimensions: [],

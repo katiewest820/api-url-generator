@@ -1,7 +1,8 @@
 import React from 'react';
 import './main.css'
 import 'react-tabs/style/react-tabs.css';
-import ReportBuild from '../reportBuild/reportBuild';
+import CostReport from '../costReport/costReport';
+import UtilReport from '../utilReport/utilReport';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 export default class Main extends React.Component{
@@ -14,26 +15,20 @@ export default class Main extends React.Component{
 						Documentation
 					</Tab>
 					<Tab>
-						Reports
+						Cost Reports
 					</Tab>
 					<Tab>
-						Views
-					</Tab>
-					<Tab>
-						Users
+						Utilization Reports
 					</Tab>
 				</TabList>
 				<TabPanel>
 					<p>Docs tab</p>
 				</TabPanel>
 				<TabPanel>
-					<ReportBuild/>
+					<CostReport/>
 				</TabPanel>
 				<TabPanel>
-					<p>view tab</p>
-				</TabPanel>
-				<TabPanel>
-					<p>user tab</p>
+					<UtilReport/>
 				</TabPanel>
 			</Tabs>
 		)

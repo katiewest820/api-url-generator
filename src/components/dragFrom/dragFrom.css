@@ -1,7 +1,8 @@
 .dragBox li{
 	list-style-type: none !important;
     width: fit-content;
-    padding: 10px;
+    padding: 20px;
+    margin: 10px;
     border: dotted 1px grey;
     align-self: center;
     justify-self: center;
@@ -9,9 +10,27 @@
 
 .dragBox ul{
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(150px, max-content));
+	grid-template-columns: repeat(auto-fit, minmax(150px, max-content));
 	border: solid 2px grey;
-	width: 95%;
 	margin: auto;
 	min-height: 100px;
+}
+
+.deleteButton{
+	padding: 0px;
+	height: 50px;
+	width:50px;
+	position: absolute;
+	top: -15px;
+	right: -15px;
+	background: none;
+	border: none;
+}
+
+.deleteButton:hover{
+	cursor: pointer;
+}
+
+.sortableItemLi{
+	position: relative;
 }

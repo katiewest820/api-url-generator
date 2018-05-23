@@ -56,8 +56,6 @@ export default class SortableComponent extends React.Component {
       console.log(index)
       this.state.items.splice(index,1);
       this.state.indexVal.splice(index, 1);
-     
-      
       this.setState({
           items : this.state.items, 
           indexVal: this.state.indexVal
@@ -75,9 +73,11 @@ export default class SortableComponent extends React.Component {
       
 
       return (
-        <li>
+        <li className="sortableItemLi">
           {value}
-          <button key={`input-${value}`} onClick={() => this.onRemove(matchingIndex)}> Remove </button>
+          <button className="deleteButton fas fa-times" key={`input-${value}`} onClick={() => this.onRemove(matchingIndex)} >
+           
+          </button>
         </li>
       );
     });
