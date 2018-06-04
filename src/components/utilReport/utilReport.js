@@ -3,6 +3,9 @@ import DragFrom from '../dragFrom/dragFrom';
 import DatePicker from '../datePicker/datePicker';
 import Moment from 'moment';
 
+import Select from 'react-select';
+import '../../../node_modules/react-select/dist/react-select.css';
+
 export default class UtilReport extends React.Component{
 	constructor(){
 		super();
@@ -10,74 +13,82 @@ export default class UtilReport extends React.Component{
 			apiVersion: 'https://app.cloudability.com/api/1/reporting/run', 
 			props: [],
 			indexVal: [],
-			//metrics_dimensions: [],
 			generatedUrl: '',
 			parameter: '',
-			parameterInput: ''
+			parameterInput: '',
+			selectedOption: '',
+			
 			
 		}
 	}
 
+	handleChange = (selectedOption) => {
+		console.log(selectedOption)
+		let index = selectedOption.length -1;
+    	this.setState({ selectedOption: selectedOption });
+    	if(selectedOption){
+    		
+    		this.selectItems(selectedOption[index].key, selectedOption[index].value)
+    	}
+
+  	}
+
 	selectItems(key, value){
-  		console.log(value)
-  		console.log(key)
-  		
-  		// if(key == 'Dimension'){
-  		// 	this.state.metrics_dimensions.push(`dimensions=${value}`)
-  		// }else if(key == 'Metrics'){
-  		// 	this.state.metrics_dimensions.push(`metrics=${value}`)
-  		// }
-  		// else {
-  		// 	this.state.metrics_dimensions.push(`${key}=${value}`)
-  		// }
   		this.state.props.push(`${key}:${value}`);
   		let newItemsList = this.state.props;
-
   		let nextIndexVal;
     	if(this.state.props.length > 0){
     		let nextIndexVal = this.state.props.length -1;
-      		console.log(nextIndexVal)
       		this.state.indexVal.push(nextIndexVal)
-      		console.log(this.state.indexVal)
-      		console.log('hiiiiiiii')
       	}
-  		this.passItemBackToParent(this.state.props)
+  		this.passItemBackToParent(this.state.props, "")
   	}
 
   	addDates(start, end){
   		let startDate = Moment(start).format('YYYY-MM-DD')
   		let endDate = Moment(end).format('YYYY-MM-DD')
-  		console.log(endDate)
-  		console.log(startDate)
   		this.selectItems('start_date', startDate)
   		this.selectItems('end_date', endDate)
   	}
 
-  	passItemBackToParent(items){
-  		console.log(items)
+  	passItemBackToParent(items, deletedValue){
+  		
+  		console.log(deletedValue)
+  		if(deletedValue.length > 0){
+  			let key = deletedValue.split(":")
+  			console.log(key)
+  			
+  			this.state.selectedOption.map((item, index)   => {
+  				console.log(item)
+  				console.log(index)
+  				if(item.value == key[1]){
+  					this.state.selectedOption.splice(index, 1)
+  					this.setState({selectedOption: this.state.selectedOption})
+  					
+  				}
+  			})
+  			
+  		}
   		this.setState({props: items})
   		let string = items.toString().toLowerCase().replace(/:/g, '=');
   		let metrics_dimensions = string.replace(/,/g, '&');
-  		console.log(metrics_dimensions)
-  		//this.setState({metrics_dimensions: metrics_dimensions})
   		this.generateApiUrl(metrics_dimensions)
   	}
   		
   	generateApiUrl(metrics_dimensions){
   	 	let result = '';
   		result = `${this.state.apiVersion}/${metrics_dimensions}`
-  		console.log(result)
   		this.setState({generatedUrl: result})
   	}
 
   	addParamenter(){
-  		console.log(this.state.parameter)
-  		console.log(this.state.parameterInput)
   		this.selectItems(this.state.parameter, this.state.parameterInput)
   	}
 
 	render(){
 		console.log(this.state.props)
+		let selectedOption = this.state.selectedOption;
+		
 		return(
 			<div className="reportBuildDiv">
 				
@@ -98,14 +109,27 @@ export default class UtilReport extends React.Component{
 		    		<div>
 			    		<h2>Dimensions</h2>	
 				    		<h3>Time</h3>
-				    			<label>Date</label>
+
+				    		<Select
+				    			multi={true}
+				    			
+						        name="form-field-name"
+						        value={selectedOption}
+						        
+						        onChange={this.handleChange}
+						        options={[
+						          { value: 'date', key: 'dimension', label: 'Date' },
+						          { value: 'day', key: 'dimension', label: 'Day' },
+						        ]}
+						      />
+				    			{/*<label>Date</label>
 					    		<input type="checkbox" value="date" onClick={e => this.selectItems("dimension", e.target.value)}/>
 					    		<label>Day</label>
 					    		<input type="checkbox" value="day" onClick={e => this.selectItems("dimension", e.target.value)}/>
 					    		<label>Day of Week</label>
 					    		<input type="checkbox" value="day_of_week" onClick={e => this.selectItems("dimension", e.target.value)}/>
 					    		<label>Year</label>
-					    		<input type="checkbox" value="year" onClick={e => this.selectItems("dimension", e.target.value)}/>
+					    		<input type="checkbox" value="year" onClick={e => this.selectItems("dimension", e.target.value)}/>*/}
 					    	<h3>Usage</h3>
 					    		<label>Day's Alive</label>
 					    		<input type="checkbox" value="days_alive" onClick={e => this.selectItems("dimension", e.target.value)}/>

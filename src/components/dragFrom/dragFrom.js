@@ -47,22 +47,21 @@ export default class SortableComponent extends React.Component {
         indexVal: arrayMove(this.state.indexVal, oldIndex, newIndex)
     	});
       
-      this.props.passItemBackToParent(this.state.items)
+      this.props.passItemBackToParent(this.state.items, "")
   	};
 
 
 
     onRemove(index){
-      console.log(index)
+      let deletedValue = this.state.items[index];
       this.state.items.splice(index,1);
       this.state.indexVal.splice(index, 1);
       this.setState({
           items : this.state.items, 
           indexVal: this.state.indexVal
       });
-      console.log(this.state.items)
-      console.log(this.state.indexVal)
-      this.props.passItemBackToParent(this.state.items)
+     
+      this.props.passItemBackToParent(this.state.items, deletedValue)
     }
 
   render() {
@@ -75,9 +74,7 @@ export default class SortableComponent extends React.Component {
       return (
         <li className="sortableItemLi">
           {value}
-          <button className="deleteButton fas fa-times" key={`input-${value}`} onClick={() => this.onRemove(matchingIndex)} >
-           
-          </button>
+          <button className="deleteButton fas fa-times" key={`input-${value}`} onClick={() => this.onRemove(matchingIndex)}></button>
         </li>
       );
     });
