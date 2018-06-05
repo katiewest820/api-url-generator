@@ -108,42 +108,38 @@ export default class UtilReport extends React.Component{
 	    		<div className="DimensionsMetrics">
 		    		<div>
 			    		<h2>Dimensions</h2>	
-				    		<h3>Time</h3>
-
 				    		<Select
 				    			multi={true}
-				    			
 						        name="form-field-name"
 						        value={selectedOption}
-						        
 						        onChange={this.handleChange}
 						        options={[
-						          { value: 'date', key: 'dimension', label: 'Date' },
-						          { value: 'day', key: 'dimension', label: 'Day' },
+						          { value: 'date', key: 'dimension', label: 'Date', clearableValue: false },
+						          { value: 'day', key: 'dimension', label: 'Day', clearableValue: false },
+						          { value: 'day_of_week', key: 'dimension', label: 'Day of Week', clearableValue: false },
+						          { value: 'year', key: 'dimension', label: 'Year', clearableValue: false },
+						          { value: 'month', key: 'dimension', label: 'Month (Category)', clearableValue: false },
+						          { value: 'year_month', key: 'dimension', label: 'Month (Year)', clearableValue: false },
+						          { value: 'week', key: 'dimension', label: 'Week (Category)', clearableValue: false },
+						          { value: 'year_week', key: 'dimension', label: 'Week (Year)', clearableValue: false },
+						          { value: 'compute_usage_type', key: 'dimension', label: 'Compute Usage Type', clearableValue: false },
+						          { value: 'engine', key: 'dimension', label: 'Engine', clearableValue: false },
+						          { value: 'instance_category', key: 'dimension', label: 'Instance Category', clearableValue: false },
+						          { value: 'instance_family', key: 'dimension', label: 'Instance Family', clearableValue: false },
+						          { value: 'instance_size', key: 'dimension', label: 'Instance Size', clearableValue: false },
+						          { value: 'instance_type', key: 'dimension', label: 'Instance Type', clearableValue: false },
+						          { value: 'lease_type', key: 'dimension', label: 'Lease Type', clearableValue: false },
+						          { value: 'operating_system', key: 'dimension', label: 'Operating System', clearableValue: false },
+						          { value: 'operation', key: 'dimension', label: 'Operation', clearableValue: false },
+						          { value: 'reservation_identifier', key: 'dimension', label: 'Reservation ID', clearableValue: false },
+						          { value: 'resource_identifier', key: 'dimension', label: 'Resource ID', clearableValue: false },
+						          { value: 'transaction_type', key: 'dimension', label: 'Transaction Type', clearableValue: false },
+						          { value: 'usage_family', key: 'dimension', label: 'Usage Family', clearableValue: false },
+						          { value: 'usage_type', key: 'dimension', label: 'Usage Type', clearableValue: false },
+
+						          
 						        ]}
-						      />
-				    			{/*<label>Date</label>
-					    		<input type="checkbox" value="date" onClick={e => this.selectItems("dimension", e.target.value)}/>
-					    		<label>Day</label>
-					    		<input type="checkbox" value="day" onClick={e => this.selectItems("dimension", e.target.value)}/>
-					    		<label>Day of Week</label>
-					    		<input type="checkbox" value="day_of_week" onClick={e => this.selectItems("dimension", e.target.value)}/>
-					    		<label>Year</label>
-					    		<input type="checkbox" value="year" onClick={e => this.selectItems("dimension", e.target.value)}/>*/}
-					    	<h3>Usage</h3>
-					    		<label>Day's Alive</label>
-					    		<input type="checkbox" value="days_alive" onClick={e => this.selectItems("dimension", e.target.value)}/>
-					    		<label>Storage Type</label>
-					    		<input type="checkbox" value="storage_type" onClick={e => this.selectItems("dimension", e.target.value)}/>
-					    	<h3>Vendor</h3>
-					    		<label>Account ID</label>
-					    		<input type="checkbox" value="account_id" onClick={e => this.selectItems("dimension", e.target.value)}/>
-					    		<label>Account Name</label>
-					    		<input type="checkbox" value="account_name" onClick={e => this.selectItems("dimension", e.target.value)}/>
-					    		<label>AMI</label>
-					    		<input type="checkbox" value="ami" onClick={e => this.selectItems("dimension", e.target.value)}/>
-					    		<label>Security Group ID's</label>
-					    		<input type="checkbox" value="security_group_id" onClick={e => this.selectItems("dimension", e.target.value)}/>
+						    />
 				    </div>
 				    <div>
 					    <h2>Metrics</h2>	
