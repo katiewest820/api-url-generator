@@ -3,6 +3,9 @@ import DragFrom from '../dragFrom/dragFrom';
 import DatePicker from '../datePicker/datePicker';
 import Moment from 'moment';
 
+import Select from 'react-select';
+import '../../../node_modules/react-select/dist/react-select.css';
+
 export default class CostReport extends React.Component{
 	constructor(){
 		super();
@@ -10,74 +13,104 @@ export default class CostReport extends React.Component{
 			apiVersion: 'https://app.cloudability.com/api/1/reporting/cost/run', 
 			props: [],
 			indexVal: [],
-			//metrics_dimensions: [],
 			generatedUrl: '',
 			parameter: '',
-			parameterInput: ''
-			
+			parameterInput: '',
+			selectedDimensionOption: '',
+			selectedMetricOption: ''
 		}
 	}
 
+	handleDimensionChange = (selectedDimensionOption) => {
+		console.log(selectedDimensionOption)
+		let index = selectedDimensionOption.length -1;
+    	this.setState({ selectedDimensionOption: selectedDimensionOption });
+    	if(selectedDimensionOption){
+    		this.selectItems(selectedDimensionOption[index].key, selectedDimensionOption[index].value)
+    	}
+  	}
+
+  	handleMetricChange = (selectedMetricOption) => {
+		console.log(selectedMetricOption)
+		let index = selectedMetricOption.length -1;
+    	this.setState({ selectedMetricOption: selectedMetricOption });
+    	if(selectedMetricOption){
+    		this.selectItems(selectedMetricOption[index].key, selectedMetricOption[index].value)
+    	}
+  	}
+
 	selectItems(key, value){
-  		console.log(value)
-  		console.log(key)
-  		
-  		// if(key == 'Dimension'){
-  		// 	this.state.metrics_dimensions.push(`dimensions=${value}`)
-  		// }else if(key == 'Metrics'){
-  		// 	this.state.metrics_dimensions.push(`metrics=${value}`)
-  		// }
-  		// else {
-  		// 	this.state.metrics_dimensions.push(`${key}=${value}`)
-  		// }
   		this.state.props.push(`${key}:${value}`);
   		let newItemsList = this.state.props;
-
   		let nextIndexVal;
     	if(this.state.props.length > 0){
     		let nextIndexVal = this.state.props.length -1;
-      		console.log(nextIndexVal)
       		this.state.indexVal.push(nextIndexVal)
-      		console.log(this.state.indexVal)
-      		console.log('hiiiiiiii')
       	}
-  		this.passItemBackToParent(this.state.props)
+  		this.passItemBackToParent(this.state.props, "")
   	}
 
   	addDates(start, end){
   		let startDate = Moment(start).format('YYYY-MM-DD')
   		let endDate = Moment(end).format('YYYY-MM-DD')
-  		console.log(endDate)
-  		console.log(startDate)
   		this.selectItems('start_date', startDate)
   		this.selectItems('end_date', endDate)
   	}
 
-  	passItemBackToParent(items){
-  		console.log(items)
+  	passItemBackToParent(items, deletedValue){
+  		console.log(deletedValue)
+  		if(deletedValue.length > 0){
+  			let key = deletedValue.split(":")
+  			console.log(key)
+  			if(key[0] == 'dimension'){
+	  			this.state.selectedDimensionOption.map((item, index)   => {
+	  				console.log(item)
+	  				console.log(index)
+	  				if(item.value == key[1]){
+	  					this.state.selectedDimensionOption.splice(index, 1)
+	  					this.setState({selectedDimensionOption: this.state.selectedDimensionOption})
+	  				}
+	  			})
+  			}else{
+  				console.log(this.state.selectedMetricOption)
+  				this.state.selectedMetricOption.map((item, index)   => {
+	  				console.log(item)
+	  				console.log(index)
+	  				if(item.value == key[1]){
+	  					this.state.selectedMetricOption.splice(index, 1)
+	  					this.setState({selectedMetricOption: this.state.selectedMetricOption})
+	  				}
+	  			})
+  			}	
+  		}
   		this.setState({props: items})
   		let string = items.toString().toLowerCase().replace(/:/g, '=');
   		let metrics_dimensions = string.replace(/,/g, '&');
-  		console.log(metrics_dimensions)
-  		//this.setState({metrics_dimensions: metrics_dimensions})
   		this.generateApiUrl(metrics_dimensions)
   	}
   		
   	generateApiUrl(metrics_dimensions){
   	 	let result = '';
   		result = `${this.state.apiVersion}/${metrics_dimensions}`
-  		console.log(result)
   		this.setState({generatedUrl: result})
   	}
 
   	addParamenter(){
-  		console.log(this.state.parameter)
-  		console.log(this.state.parameterInput)
   		this.selectItems(this.state.parameter, this.state.parameterInput)
   	}
 
 	render(){
 		console.log(this.state.props)
+		let selectedOption = this.state.selectedOption;
+		let generatedUrl;
+		if(this.state.generatedUrl && this.state.props.length != 0){
+			generatedUrl = (
+				<span>
+					<p>Your API Url:</p>
+					<p>{this.state.generatedUrl}</p>
+				</span>
+			)
+		}
 		return(
 			<div className="reportBuildDiv">
 	    		<DatePicker addDates={this.addDates.bind(this)}/>
@@ -96,59 +129,77 @@ export default class CostReport extends React.Component{
 	    		<div className="DimensionsMetrics">
 		    		<div>
 			    		<h2>Dimensions</h2>	
-				    		<h3>Time</h3>
-				    			<label>Date</label>
-					    		<input type="checkbox" value="Date" onClick={e => this.selectItems("Dimension", e.target.value)}/>
-					    		<label>Day</label>
-					    		<input type="checkbox" value="Day" onClick={e => this.selectItems("Dimension", e.target.value)}/>
-					    		<label>Day of Week</label>
-					    		<input type="checkbox" value="Day of Week" onClick={e => this.selectItems("Dimension", e.target.value)}/>
-					    		<label>Year</label>
-					    		<input type="checkbox" value="Year" onClick={e => this.selectItems("Dimension", e.target.value)}/>
-					    	<h3>Usage</h3>
-					    		<label>Compute Usage Type</label>
-					    		<input type="checkbox" value="Compute Usage Type" onClick={e => this.selectItems("Dimension", e.target.value)}/>
-					    		<label>Engine</label>
-					    		<input type="checkbox" value="Engine" onClick={e => this.selectItems("Dimension", e.target.value)}/>
-					    		<label>Instance Category</label>
-					    		<input type="checkbox" value="Instance Category" onClick={e => this.selectItems("Dimension", e.target.value)}/>
-					    		<label>Instance Family</label>
-					    		<input type="checkbox" value="Instance Family" onClick={e => this.selectItems("Dimension", e.target.value)}/>
-					    	<h3>Vendor</h3>
-					    		<label>Account ID</label>
-					    		<input type="checkbox" value="Account ID" onClick={e => this.selectItems("Dimension", e.target.value)}/>
-					    		<label>Account Name</label>
-					    		<input type="checkbox" value="Account Name" onClick={e => this.selectItems("Dimension", e.target.value)}/>
-					    		<label>Availability Zone</label>
-					    		<input type="checkbox" value="Availability Zone" onClick={e => this.selectItems("Dimension", e.target.value)}/>
-					    		<label>Item Description</label>
-					    		<input type="checkbox" value="Item Description" onClick={e => this.selectItems("Dimension", e.target.value)}/>
+				    		<Select
+				    			multi={true}
+						        name="form-field-name"
+						        value={this.state.selectedDimensionOption}
+						        onChange={this.handleDimensionChange}
+						        options={[
+						          { value: 'date', key: 'dimension', label: 'Date', clearableValue: false },
+						          { value: 'day', key: 'dimension', label: 'Day', clearableValue: false },
+						          { value: 'day_of_week', key: 'dimension', label: 'Day of Week', clearableValue: false },
+						          { value: 'year', key: 'dimension', label: 'Year', clearableValue: false },
+						          { value: 'month', key: 'dimension', label: 'Month (Category)', clearableValue: false },
+						          { value: 'year_month', key: 'dimension', label: 'Month (Year)', clearableValue: false },
+						          { value: 'week', key: 'dimension', label: 'Week (Category)', clearableValue: false },
+						          { value: 'year_week', key: 'dimension', label: 'Week (Year)', clearableValue: false },
+						          { value: 'compute_usage_type', key: 'dimension', label: 'Compute Usage Type', clearableValue: false },
+						          { value: 'engine', key: 'dimension', label: 'Engine', clearableValue: false },
+						          { value: 'instance_category', key: 'dimension', label: 'Instance Category', clearableValue: false },
+						          { value: 'instance_family', key: 'dimension', label: 'Instance Family', clearableValue: false },
+						          { value: 'instance_size', key: 'dimension', label: 'Instance Size', clearableValue: false },
+						          { value: 'instance_type', key: 'dimension', label: 'Instance Type', clearableValue: false },
+						          { value: 'lease_type', key: 'dimension', label: 'Lease Type', clearableValue: false },
+						          { value: 'operating_system', key: 'dimension', label: 'Operating System', clearableValue: false },
+						          { value: 'operation', key: 'dimension', label: 'Operation', clearableValue: false },
+						          { value: 'reservation_identifier', key: 'dimension', label: 'Reservation ID', clearableValue: false },
+						          { value: 'resource_identifier', key: 'dimension', label: 'Resource ID', clearableValue: false },
+						          { value: 'transaction_type', key: 'dimension', label: 'Transaction Type', clearableValue: false },
+						          { value: 'usage_family', key: 'dimension', label: 'Usage Family', clearableValue: false },
+						          { value: 'usage_type', key: 'dimension', label: 'Usage Type', clearableValue: false },
+						          { value: 'vendor_account_identifier', key: 'dimension', label: 'Account ID', clearableValue: false },
+						          { value: 'vendor_account_name', key: 'dimension', label: 'Account Name', clearableValue: false },
+						          { value: 'region_zone', key: 'dimension', label: 'Availability Zone', clearableValue: false },
+						          { value: 'item_description', key: 'dimension', label: 'Item Description', clearableValue: false },
+						          { value: 'account_identifier', key: 'dimension', label: 'Payer Account ID', clearableValue: false },
+						          { value: 'account_name', key: 'dimension', label: 'Payer Account Name', clearableValue: false },
+						          { value: 'service_name', key: 'dimension', label: 'Product Name', clearableValue: false },
+						          { value: 'region', key: 'dimension', label: 'Region', clearableValue: false },
+						          { value: 'seller', key: 'dimension', label: 'Seller', clearableValue: false },
+						          { value: 'enhanced_service_name', key: 'dimension', label: 'Service Name', clearableValue: false },
+						          { value: 'vendor', key: 'dimension', label: 'Vendor', clearableValue: false },
+						          { value: 'zone', key: 'dimension', label: 'Zone', clearableValue: false },
+						        ]}
+						    />
 				    </div>
-				     <div>
-					    <h2>Metrics</h2>	
-				    		<h3>Cost</h3>
-				    			<label>Date</label>
-					    		<input type="checkbox" value="Date" onClick={e => this.selectItems("Metric", e.target.value)}/>
-					    		<label>Day</label>
-					    		<input type="checkbox" value="Day" onClick={e => this.selectItems("Metric", e.target.value)}/>
-					    		<label>Day of Week</label>
-					    		<input type="checkbox" value="Day of Week" onClick={e => this.selectItems("Metric", e.target.value)}/>
-					    		<label>Year</label>
-					    		<input type="checkbox" value="Year" onClick={e => this.selectItems("Metric", e.target.value)}/>
-					    	<h3>Usage</h3>
-					    		<label>Compute Usage Type</label>
-					    		<input type="checkbox" value="Compute Usage Type" onClick={e => this.selectItems("Metric", e.target.value)}/>
-					    		<label>Engine</label>
-					    		<input type="checkbox" value="Engine" onClick={e => this.selectItems("Metric", e.target.value)}/>
-					    		<label>Instance Category</label>
-					    		<input type="checkbox" value="Instance Category" onClick={e => this.selectItems("Metric", e.target.value)}/>
-					    		<label>Instance Family</label>
-					    		<input type="checkbox" value="Instance Family" onClick={e => this.selectItems("Metric", e.target.value)}/>
-					</div>
+				    <div>
+			    		<h2>Metrics</h2>	
+				    		<Select
+				    			multi={true}
+						        name="form-field-name"
+						        value={this.state.selectedMetricOption}
+						        onChange={this.handleMetricChange}
+						        options={[
+						          { value: 'unblended_cost', key: 'metrics', label: 'Cost (Total)', clearableValue: false },
+						          { value: 'adjusted_cost', key: 'metrics', label: 'Cost (Adjusted)', clearableValue: false },
+						          { value: 'total_amortized_cost', key: 'metrics', label: 'Cost (Amortized)', clearableValue: false },
+						          { value: 'invoiced_cost', key: 'metrics', label: 'Cost (Total Blended)', clearableValue: false },
+						          { value: 'cost_adjusted', key: 'metrics', label: 'Cost Adjustment', clearableValue: false },
+						          { value: 'blended_rate', key: 'metrics', label: 'Rate (Blended)', clearableValue: false },
+						          { value: 'unblended_rate', key: 'metrics', label: 'Rate (Unblended)', clearableValue: false },
+						          						          
+						        ]}
+						    />
+				    </div>
 				</div>
 				<DragFrom items={this.state.props} indexVal={this.state.indexVal} passItemBackToParent={this.passItemBackToParent.bind(this)}/>
-				<p>{this.state.generatedUrl}</p>
+				<div className="generatedUrlDiv">
+					{generatedUrl}
+				</div>
 			</div>
 		)
 	}
 }
+
+
+

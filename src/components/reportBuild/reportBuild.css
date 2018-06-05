@@ -1,5 +1,5 @@
 .reportBuildDiv{
-	padding: 10%;
+	padding: 5%;
 	margin: auto;
 	text-align: center;
 }
@@ -9,4 +9,9 @@
 	grid-template-columns: 1fr 1fr;
 	margin: 30px;
 	
+}
+
+.generatedUrlDiv{
+	min-height: 80px;
+	max-height: fit-content;
 }

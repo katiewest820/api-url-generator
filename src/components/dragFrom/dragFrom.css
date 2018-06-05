@@ -1,16 +1,21 @@
 .dragBox li{
 	list-style-type: none !important;
     width: fit-content;
-    padding: 20px;
+    padding: 15px;
     margin: 10px;
+    min-height: 40px;
+    max-height: fit-content;
+    width: 160px;
     border: dotted 1px grey;
     align-self: center;
     justify-self: center;
+    word-wrap: break-word;
 }
 
 .dragBox ul{
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(150px, max-content));
+	grid-template-columns: repeat(auto-fill, minmax(200px, max-content));
+	padding: 0px;
 	border: solid 2px grey;
 	margin: auto;
 	min-height: 100px;
