@@ -16,24 +16,42 @@ export default class UtilReport extends React.Component{
 			generatedUrl: '',
 			parameter: '',
 			parameterInput: '',
-			selectedOption: '',
-			
-			
+			selectedDimensionOption: '',
+			selectedMetricOption: ''
 		}
 	}
 
-	handleChange = (selectedOption) => {
-		console.log(selectedOption)
-		let index = selectedOption.length -1;
-    	this.setState({ selectedOption: selectedOption });
-    	if(selectedOption){
-    		
-    		this.selectItems(selectedOption[index].key, selectedOption[index].value)
+	handleDimensionChange = (selectedDimensionOption) => {
+		console.log(selectedDimensionOption)
+		let index = selectedDimensionOption.length -1;
+    	this.setState({ selectedDimensionOption: selectedDimensionOption });
+    	if(selectedDimensionOption){
+    		this.selectItems(selectedDimensionOption[index].key, selectedDimensionOption[index].value)
     	}
+  	}
 
+  	handleMetricChange = (selectedMetricOption) => {
+		console.log(selectedMetricOption)
+		let index = selectedMetricOption.length -1;
+    	this.setState({ selectedMetricOption: selectedMetricOption });
+    	if(selectedMetricOption){
+    		this.selectItems(selectedMetricOption[index].key, selectedMetricOption[index].value)
+    	}
   	}
 
 	selectItems(key, value){
+		//prevents more than two dates - overrides origional date of new date range selected 
+		if(key == 'start_date' || key == 'end_date'){
+			let isThereDate = this.state.props.findIndex( date => {
+	  			let itemKey = date.split(':');
+	  			return key == itemKey[0]
+			});
+			if(isThereDate != -1){
+				this.state.props.splice(isThereDate, 1)
+				this.setState({props: this.state.props})
+			}
+		}
+		
   		this.state.props.push(`${key}:${value}`);
   		let newItemsList = this.state.props;
   		let nextIndexVal;
@@ -41,6 +59,7 @@ export default class UtilReport extends React.Component{
     		let nextIndexVal = this.state.props.length -1;
       		this.state.indexVal.push(nextIndexVal)
       	}
+
   		this.passItemBackToParent(this.state.props, "")
   	}
 
@@ -56,14 +75,34 @@ export default class UtilReport extends React.Component{
   		if(deletedValue.length > 0){
   			let key = deletedValue.split(":")
   			console.log(key)
-  			this.state.selectedOption.map((item, index)   => {
-  				console.log(item)
-  				console.log(index)
-  				if(item.value == key[1]){
-  					this.state.selectedOption.splice(index, 1)
-  					this.setState({selectedOption: this.state.selectedOption})
-  				}
-  			})	
+  			if(key[0] == 'dimension'){
+	  			this.state.selectedDimensionOption.map((item, index)   => {
+	  				console.log(item)
+	  				console.log(index)
+	  				if(item.value == key[1]){
+	  					this.state.selectedDimensionOption.splice(index, 1)
+	  					this.setState({selectedDimensionOption: this.state.selectedDimensionOption})
+	  				}
+	  			})
+  			}else if(key[0] == 'metrics'){
+  				console.log(this.state.selectedMetricOption)
+  				this.state.selectedMetricOption.map((item, index)   => {
+	  				console.log(item)
+	  				console.log(index)
+	  				if(item.value == key[1]){
+	  					this.state.selectedMetricOption.splice(index, 1)
+	  					this.setState({selectedMetricOption: this.state.selectedMetricOption})
+	  				}
+	  			})
+  			} else {
+  				this.state.props.map((item, index) => {
+  					let propKey = item.split(":");
+  					if(propKey[1] == key[1]){
+  						this.state.props.splice(index, 1)
+  						this.setState({props: this.state.props})
+  					}
+  				})
+  			}
   		}
   		this.setState({props: items})
   		let string = items.toString().toLowerCase().replace(/:/g, '=');
@@ -109,14 +148,18 @@ export default class UtilReport extends React.Component{
 	    			<input type="text" onChange={e => this.setState({parameterInput: e.target.value})}/>
 	    			<button onClick={this.addParamenter.bind(this)}>Add</button>
 	    		</div>
+	    		<div className="csvDiv">
+	    			<label>CSV Format</label>
+	    			<input type="checkbox" onClick={() => this.setState({apiVersion: 'https://app.cloudability.com/api/1/reporting/run.csv'})}/>
+	    		</div>
 	    		<div className="DimensionsMetrics">
 		    		<div>
 			    		<h2>Dimensions</h2>	
 				    		<Select
 				    			multi={true}
 						        name="form-field-name"
-						        value={selectedOption}
-						        onChange={this.handleChange}
+						        value={this.state.selectedDimensionOption}
+						        onChange={this.handleDimensionChange}
 						        options={[
 						          { value: 'date', key: 'dimension', label: 'Date', clearableValue: false },
 						          { value: 'day', key: 'dimension', label: 'Day', clearableValue: false },
@@ -163,27 +206,24 @@ export default class UtilReport extends React.Component{
 						        ]}
 						    />
 				    </div>
-				    <div>
-					    <h2>Metrics</h2>	
-				    		<h3>Processing</h3>
-				    			<label>Bandwidth In</label>
-					    		<input type="checkbox" value="date" onClick={e => this.selectItems("metric", e.target.value)}/>
-					    		<label>Bandwidth Out</label>
-					    		<input type="checkbox" value="day" onClick={e => this.selectItems("metric", e.target.value)}/>
-					    		<label>Day of Week</label>
-					    		<input type="checkbox" value="day_of_week" onClick={e => this.selectItems("metric", e.target.value)}/>
-					    		<label>Year</label>
-					    		<input type="checkbox" value="year" onClick={e => this.selectItems("metric", e.target.value)}/>
-					    	<h3>Usage</h3>
-					    		<label>Compute Usage Type</label>
-					    		<input type="checkbox" value="compute_usage_type" onClick={e => this.selectItems("metric", e.target.value)}/>
-					    		<label>Engine</label>
-					    		<input type="checkbox" value="engine" onClick={e => this.selectItems("metric", e.target.value)}/>
-					    		<label>Instance Category</label>
-					    		<input type="checkbox" value="instance_category" onClick={e => this.selectItems("metric", e.target.value)}/>
-					    		<label>Instance Family</label>
-					    		<input type="checkbox" value="instance_family" onClick={e => this.selectItems("metric", e.target.value)}/>
-					</div>
+				   	<div>
+			    		<h2>Metrics</h2>	
+			    		<Select
+			    			multi={true}
+					        name="form-field-name"
+					        value={this.state.selectedMetricOption}
+					        onChange={this.handleMetricChange}
+					        options={[
+					          { value: 'unblended_cost', key: 'metrics', label: 'Cost (Total)', clearableValue: false },
+					          { value: 'adjusted_cost', key: 'metrics', label: 'Cost (Adjusted)', clearableValue: false },
+					          { value: 'total_amortized_cost', key: 'metrics', label: 'Cost (Amortized)', clearableValue: false },
+					          { value: 'invoiced_cost', key: 'metrics', label: 'Cost (Total Blended)', clearableValue: false },
+					          { value: 'cost_adjusted', key: 'metrics', label: 'Cost Adjustment', clearableValue: false },
+					          { value: 'blended_rate', key: 'metrics', label: 'Rate (Blended)', clearableValue: false },
+					          { value: 'unblended_rate', key: 'metrics', label: 'Rate (Unblended)', clearableValue: false },					          
+					        ]}
+					    />
+				    </div>
 				</div>
 				<DragFrom items={this.state.props} indexVal={this.state.indexVal} passItemBackToParent={this.passItemBackToParent.bind(this)}/>
 				{generatedUrl}

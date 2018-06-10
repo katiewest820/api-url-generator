@@ -13,22 +13,22 @@ const stateDefinitions = {
   }
 };
 
-const dateRanges = [
-  {
-    state: 'enquire',
-    range: moment.range(
-      moment().add(2, 'weeks').subtract(5, 'days'),
-      moment().add(2, 'weeks').add(6, 'days')
-    ),
-  },
-  {
-    state: 'unavailable',
-    range: moment.range(
-      moment().add(3, 'weeks'),
-      moment().add(3, 'weeks').add(5, 'days')
-    ),
-  },
-];
+// const dateRanges = [
+//   {
+//     state: 'enquire',
+//     range: moment.range(
+//       moment().add(2, 'weeks').subtract(5, 'days'),
+//       moment().add(2, 'weeks').add(6, 'days')
+//     ),
+//   },
+//   {
+//     state: 'unavailable',
+//     range: moment.range(
+//       moment().add(3, 'weeks'),
+//       moment().add(3, 'weeks').add(5, 'days')
+//     ),
+//   },
+// ];
 
 export default class DatePicker extends React.Component{
 
@@ -44,7 +44,6 @@ export default class DatePicker extends React.Component{
   handleSelect(range, states) {
   	console.log(range)
   	console.log(states)
-    // range is a moment-range object
     this.setState({
       value: range,
       states: states,
@@ -65,7 +64,8 @@ export default class DatePicker extends React.Component{
         defaultState="available"
         showLegend={true}
         value={this.state.value}
-        onSelect={this.handleSelect.bind(this)} />
+        onSelect={this.handleSelect.bind(this)} 
+      />
     );
   }
 }

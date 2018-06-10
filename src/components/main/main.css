@@ -1,3 +1,30 @@
 .react-tabs__tab-list{
 	padding: 20px 20px 0px 60px !important;
 }
+
+.reportBuildDiv{
+	padding: 5%;
+	margin: auto;
+	text-align: center;
+}
+
+.DimensionsMetrics{
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	margin: 30px;
+	
+}
+
+.generatedUrlDiv{
+	min-height: 80px;
+	max-height: fit-content;
+}
+
+.csvDiv{
+	padding: 20px;
+
+}
+
+.csvDiv label{
+	padding-right: 10px;
+}

@@ -40,6 +40,18 @@ export default class CostReport extends React.Component{
   	}
 
 	selectItems(key, value){
+		//prevents more than two dates - overrides origional date of new date range selected 
+		if(key == 'start_date' || key == 'end_date'){
+			let isThereDate = this.state.props.findIndex( date => {
+	  			let itemKey = date.split(':');
+	  			return key == itemKey[0]
+			});
+			if(isThereDate != -1){
+				this.state.props.splice(isThereDate, 1)
+				this.setState({props: this.state.props})
+			}
+		}
+		
   		this.state.props.push(`${key}:${value}`);
   		let newItemsList = this.state.props;
   		let nextIndexVal;
@@ -47,6 +59,7 @@ export default class CostReport extends React.Component{
     		let nextIndexVal = this.state.props.length -1;
       		this.state.indexVal.push(nextIndexVal)
       	}
+
   		this.passItemBackToParent(this.state.props, "")
   	}
 
@@ -71,7 +84,7 @@ export default class CostReport extends React.Component{
 	  					this.setState({selectedDimensionOption: this.state.selectedDimensionOption})
 	  				}
 	  			})
-  			}else{
+  			}else if(key[0] == 'metrics'){
   				console.log(this.state.selectedMetricOption)
   				this.state.selectedMetricOption.map((item, index)   => {
 	  				console.log(item)
@@ -81,7 +94,15 @@ export default class CostReport extends React.Component{
 	  					this.setState({selectedMetricOption: this.state.selectedMetricOption})
 	  				}
 	  			})
-  			}	
+  			} else {
+  				this.state.props.map((item, index) => {
+  					let propKey = item.split(":");
+  					if(propKey[1] == key[1]){
+  						this.state.props.splice(index, 1)
+  						this.setState({props: this.state.props})
+  					}
+  				})
+  			}
   		}
   		this.setState({props: items})
   		let string = items.toString().toLowerCase().replace(/:/g, '=');
@@ -125,6 +146,10 @@ export default class CostReport extends React.Component{
 	    			</select>
 	    			<input type="text" onChange={e => this.setState({parameterInput: e.target.value})}/>
 	    			<button onClick={this.addParamenter.bind(this)}>Add</button>
+	    		</div>
+	    		<div className="csvDiv">
+	    			<label>CSV Format</label>
+	    			<input type="checkbox" onClick={() => this.setState({apiVersion: 'https://app.cloudability.com/api/1/reporting/cost/run.csv'})}/>
 	    		</div>
 	    		<div className="DimensionsMetrics">
 		    		<div>
@@ -186,8 +211,7 @@ export default class CostReport extends React.Component{
 						          { value: 'invoiced_cost', key: 'metrics', label: 'Cost (Total Blended)', clearableValue: false },
 						          { value: 'cost_adjusted', key: 'metrics', label: 'Cost Adjustment', clearableValue: false },
 						          { value: 'blended_rate', key: 'metrics', label: 'Rate (Blended)', clearableValue: false },
-						          { value: 'unblended_rate', key: 'metrics', label: 'Rate (Unblended)', clearableValue: false },
-						          						          
+						          { value: 'unblended_rate', key: 'metrics', label: 'Rate (Unblended)', clearableValue: false },					          
 						        ]}
 						    />
 				    </div>
