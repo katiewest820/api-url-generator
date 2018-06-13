@@ -38,4 +38,6 @@
 
 .sortableItemLi{
 	position: relative;
+	background-color: #52a8dc;
+	color: white;
 }

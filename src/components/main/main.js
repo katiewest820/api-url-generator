@@ -9,9 +9,13 @@ export default class Main extends React.Component{
 
 	render(){
 		return(
-			<Tabs>
-				<TabList>
-					<Tab>
+			<div>
+			<Tabs defaultIndex={1}>
+				<TabList >
+					<Tab disabled={true}>
+						<img src="https://image.ibb.co/csLJEd/Image_2018_06_13_at_12_47_29_PM.png" height="50px" />
+					</Tab>
+					<Tab >
 						Documentation
 					</Tab>
 					<Tab>
@@ -25,12 +29,16 @@ export default class Main extends React.Component{
 					<p>Docs tab</p>
 				</TabPanel>
 				<TabPanel>
+					<p>Docs tab</p>
+				</TabPanel>
+				<TabPanel>
 					<CostReport/>
 				</TabPanel>
 				<TabPanel>
 					<UtilReport/>
 				</TabPanel>
 			</Tabs>
+			</div>
 		)
 	}
 }

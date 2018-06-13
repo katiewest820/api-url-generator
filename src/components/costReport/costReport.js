@@ -10,7 +10,7 @@ export default class CostReport extends React.Component{
 	constructor(){
 		super();
 		this.state = {
-			apiVersion: 'https://app.cloudability.com/api/1/reporting/cost/run', 
+			apiVersion: 'https://app.cloudability.com/api/1/reporting/cost/run?auth_token=[YOUR AUTH TOKEN]', 
 			props: [],
 			indexVal: [],
 			generatedUrl: '',
@@ -116,6 +116,20 @@ export default class CostReport extends React.Component{
   		this.setState({generatedUrl: result})
   	}
 
+  	csvReport(){
+  		console.log(this.state.apiVersion)
+  		console.log(this.state.apiVersion.includes('csv'))
+  		if(this.state.apiVersion.includes('csv')){
+  			console.log('yeahhh')
+  			this.setState({apiVersion: 'https://app.cloudability.com/api/1/reporting/run?auth_token=[YOUR AUTH TOKEN]'})
+  		}else{
+  			this.setState({apiVersion: 'https://app.cloudability.com/api/1/reporting/run.csv?auth_token=[YOUR AUTH TOKEN]'})
+  		}	
+  		setTimeout(() => {
+  			this.passItemBackToParent(this.state.props, "")
+  		}, 200)
+  	}
+
   	addParamenter(){
   		this.selectItems(this.state.parameter, this.state.parameterInput)
   	}
@@ -139,17 +153,16 @@ export default class CostReport extends React.Component{
 	    			<select value={this.state.parameter} onChange={e => this.setState({parameter: e.target.value})}>
 	    				<option></option>
 	    				<option value="sort_by" onClick={e => this.setState({parameter: e.target.value})}>Sort By</option>
-	    				<option value="order" onClick={e => this.setState({parameter: e.target.value})}>Order</option>
-	    				<option value="ofset" onClick={e => this.setState({parameter: e.target.value})}>Ofset</option>
-	    				<option value="max_results" onClick={e => this.setState({parameter: e.target.value})}>Max Results</option>
-	    				<option value="chart" onClick={e => this.setState({parameter: e.target.value})}>Chart</option>
+	    				<option value="order" onClick={e => this.setState({parameter: e.target.value})}>Order (asc or desc)</option>
+	    				<option value="offset" onClick={e => this.setState({parameter: e.target.value})}>Ofset (number)</option>
+	    				<option value="max_results" onClick={e => this.setState({parameter: e.target.value})}>Max Results (number)</option>
 	    			</select>
 	    			<input type="text" onChange={e => this.setState({parameterInput: e.target.value})}/>
 	    			<button onClick={this.addParamenter.bind(this)}>Add</button>
 	    		</div>
 	    		<div className="csvDiv">
 	    			<label>CSV Format</label>
-	    			<input type="checkbox" onClick={() => this.setState({apiVersion: 'https://app.cloudability.com/api/1/reporting/cost/run.csv'})}/>
+	    			<input type="checkbox" onClick={this.csvReport.bind(this)}/>
 	    		</div>
 	    		<div className="DimensionsMetrics">
 		    		<div>

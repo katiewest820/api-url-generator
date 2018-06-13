@@ -1,5 +1,16 @@
 .react-tabs__tab-list{
 	padding: 20px 20px 0px 60px !important;
+	background-color: #52a8dc;
+}
+
+.react-tabs__tab{
+	font-size: 20px;
+    
+    color: white;
+}
+
+.react-tabs__tab--selected{
+	color: black;
 }
 
 .reportBuildDiv{
@@ -10,7 +21,7 @@
 
 .DimensionsMetrics{
 	display: grid;
-	grid-template-columns: 1fr 1fr;
+	grid-template-columns: 1fr 1fr;	
 	margin: 30px;
 	
 }

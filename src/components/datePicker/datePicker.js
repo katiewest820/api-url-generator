@@ -58,9 +58,7 @@ export default class DatePicker extends React.Component{
         firstOfWeek={1}
         numberOfCalendars={2}
         selectionType='range'
-        minimumDate={new Date()}
         stateDefinitions={stateDefinitions}
-        
         defaultState="available"
         showLegend={true}
         value={this.state.value}
