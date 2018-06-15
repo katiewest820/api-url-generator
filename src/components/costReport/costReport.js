@@ -142,7 +142,7 @@ export default class CostReport extends React.Component{
 			generatedUrl = (
 				<span>
 					<p>Your API Url:</p>
-					<p>{this.state.generatedUrl}</p>
+					<a href={this.state.generatedUrl} target="_blank">{this.state.generatedUrl}</a>
 				</span>
 			)
 		}

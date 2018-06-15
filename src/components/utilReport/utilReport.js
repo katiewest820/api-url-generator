@@ -143,7 +143,7 @@ export default class UtilReport extends React.Component{
 			generatedUrl = (
 				<div className="generatedUrlDiv">
 					<p>Your API Url:</p>
-					<p>{this.state.generatedUrl}</p>
+					<a href={this.state.generatedUrl} target="_blank">{this.state.generatedUrl}</a>
 				</div>
 			)
 		}
