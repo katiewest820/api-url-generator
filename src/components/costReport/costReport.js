@@ -2,7 +2,8 @@ import React from 'react';
 import DragFrom from '../dragFrom/dragFrom';
 import DatePicker from '../datePicker/datePicker';
 import Moment from 'moment';
-
+import ToggleFilters from '../toggleFilters/toggleFilters';
+import ToggleParams from '../toggleParams/toggleParams';
 import Select from 'react-select';
 import '../../../node_modules/react-select/dist/react-select.css';
 
@@ -16,6 +17,7 @@ export default class CostReport extends React.Component{
 			generatedUrl: '',
 			parameter: '',
 			parameterInput: '',
+			selectedFilter: '',
 			selectedDimensionOption: '',
 			selectedMetricOption: ''
 		}
@@ -54,13 +56,43 @@ export default class CostReport extends React.Component{
 		
   		this.state.props.push(`${key}:${value}`);
   		let newItemsList = this.state.props;
-  		let nextIndexVal;
-    	if(this.state.props.length > 0){
-    		let nextIndexVal = this.state.props.length -1;
-      		this.state.indexVal.push(nextIndexVal)
-      	}
 
-  		this.passItemBackToParent(this.state.props, "")
+  		let nextIndexVal = this.state.props.length -1;
+		this.state.indexVal.push(nextIndexVal);
+		this.passItemBackToParent(this.state.props, "");
+		console.log(nextIndexVal)
+  		// let nextIndexVal = 0;
+    // 	if(this.state.props.length > 0){
+    // 		let nextIndexVal = this.state.props.length;
+    // 		this.state.indexVal.push(nextIndexVal);
+    //   	}else{
+    //   		nextIndexVal = 0;
+  		// 	this.state.indexVal.push(nextIndexVal);
+    //   	}
+  		// this.passItemBackToParent(this.state.props, "")
+  	}
+
+  	addFilter(key, value, filter){
+  		console.log(this.state.parameter);
+  		this.setState({parameter: key});
+  		this.setState({parameterInput: value});
+  		this.setState({selectedFilter: filter});
+  		this.state.props.push(`filters:${key}${filter}${value}`);
+  		let newItemsList = this.state.props;
+  		//let nextIndexVal;
+  		//if(this.state.props.length > 0){
+  			let nextIndexVal = this.state.props.length -1;
+  			this.state.indexVal.push(nextIndexVal);
+  			this.passItemBackToParent(this.state.props, "");
+  			console.log(nextIndexVal)
+  		// }else{
+  		// 	nextIndexVal = 0;
+  		// 	this.state.indexVal.push(nextIndexVal);
+  		// 	this.passItemBackToParent(this.state.props, "");
+  		// 	console.log(nextIndexVal)
+  		// }
+  		
+  		
   	}
 
   	addDates(start, end){
@@ -75,6 +107,8 @@ export default class CostReport extends React.Component{
   		if(deletedValue.length > 0){
   			let key = deletedValue.split(":")
   			console.log(key)
+  			
+  			
   			if(key[0] == 'dimension'){
 	  			this.state.selectedDimensionOption.map((item, index)   => {
 	  				console.log(item)
@@ -96,6 +130,9 @@ export default class CostReport extends React.Component{
 	  			})
   			} else {
   				this.state.props.map((item, index) => {
+  					console.log(item)
+  					console.log(index)
+  					
   					let propKey = item.split(":");
   					if(propKey[1] == key[1]){
   						this.state.props.splice(index, 1)
@@ -130,8 +167,9 @@ export default class CostReport extends React.Component{
   		}, 200)
   	}
 
-  	addParamenter(){
-  		this.selectItems(this.state.parameter, this.state.parameterInput)
+  	addParameter(parameter, parameterInput){
+
+  		this.selectItems(parameter, parameterInput)
   	}
 
 	render(){
@@ -149,17 +187,52 @@ export default class CostReport extends React.Component{
 		return(
 			<div className="reportBuildDiv">
 	    		<DatePicker addDates={this.addDates.bind(this)}/>
-	    		<div>
+	    		<div className="paramAndFilterDivs">
+	    			<ToggleParams addParameter={this.addParameter.bind(this)}/>
+	    			<ToggleFilters addFilter={this.addFilter.bind(this)}/>
+	    		</div>
+		    		{/*<div className="paramDiv">
+		    			<label>Parameters:
+		    			<select value={this.state.parameter} onChange={e => this.setState({parameter: e.target.value})}>
+		    				<option></option>
+		    				<option value="sort_by" onClick={e => this.setState({parameter: e.target.value})}>Sort By</option>
+		    				<option value="order" onClick={e => this.setState({parameter: e.target.value})}>Order (asc or desc)</option>
+		    				<option value="offset" onClick={e => this.setState({parameter: e.target.value})}>Ofset (number)</option>
+		    				<option value="max_results" onClick={e => this.setState({parameter: e.target.value})}>Max Results (number)</option>
+		    			</select>
+		    			</label>
+		    			<input type="text" onChange={e => this.setState({parameterInput: e.target.value})}/>
+		    			<button onClick={this.addParamenter.bind(this)}>Add</button>
+					</div>
+					<div>
+						
+					</div>
+				</div>
+				<div className="filterDiv">
+	    			<label>Filter By:
 	    			<select value={this.state.parameter} onChange={e => this.setState({parameter: e.target.value})}>
 	    				<option></option>
-	    				<option value="sort_by" onClick={e => this.setState({parameter: e.target.value})}>Sort By</option>
-	    				<option value="order" onClick={e => this.setState({parameter: e.target.value})}>Order (asc or desc)</option>
-	    				<option value="offset" onClick={e => this.setState({parameter: e.target.value})}>Ofset (number)</option>
-	    				<option value="max_results" onClick={e => this.setState({parameter: e.target.value})}>Max Results (number)</option>
+	    				<option value="test" onClick={e => this.setState({parameter: e.target.value})}>test</option>
+	    				<option value="test2" onClick={e => this.setState({parameter: e.target.value})}>test</option>
+	    				<option value="test3" onClick={e => this.setState({parameter: e.target.value})}>test</option>
+	    				<option value="test4" onClick={e => this.setState({parameter: e.target.value})}>test</option>
+	    			</select>
+	    			</label>
+	    			<select value={this.state.selectedFilter} onChange={e => this.setState({selectedFilter: e.target.value})}>
+	    				<option></option>
+	    				<option value="==" onClick={e => this.setState({selectedFilter: e.target.value})}>equals</option>
+	    				<option value="!=" onClick={e => this.setState({selectedFilter: e.target.value})}>not equals</option>
+	    				<option value="<" onClick={e => this.setState({selectedFilter: e.target.value})}>less than</option>
+	    				<option value=">" onClick={e => this.setState({selectedFilter: e.target.value})}>greater than</option>
+	    				<option value="<=" onClick={e => this.setState({selectedFilter: e.target.value})}>less than or equals</option>
+	    				<option value=">=" onClick={e => this.setState({selectedFilter: e.target.value})}>greater than or equals</option>
+	    				<option value="=@" onClick={e => this.setState({selectedFilter: e.target.value})}>contains</option>
+	    				<option value="!=@" onClick={e => this.setState({selectedFilter: e.target.value})}>does not contain</option>
 	    			</select>
 	    			<input type="text" onChange={e => this.setState({parameterInput: e.target.value})}/>
-	    			<button onClick={this.addParamenter.bind(this)}>Add</button>
-	    		</div>
+	    			<button onClick={this.addFilter.bind(this)}>Add</button>
+	    		</div>*/}
+	    		
 	    		<div className="csvDiv">
 	    			<label>CSV Format</label>
 	    			<input type="checkbox" onClick={this.csvReport.bind(this)}/>

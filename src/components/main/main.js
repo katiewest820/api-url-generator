@@ -13,16 +13,16 @@ export default class Main extends React.Component{
 			<Tabs defaultIndex={1}>
 				<TabList >
 					<Tab disabled={true}>
-						<img src="https://image.ibb.co/csLJEd/Image_2018_06_13_at_12_47_29_PM.png" height="50px" />
+						<p><img src="https://image.ibb.co/csLJEd/Image_2018_06_13_at_12_47_29_PM.png" width="100px" /></p>
 					</Tab>
 					<Tab >
-						Documentation
+						<p>Documentation</p>
 					</Tab>
 					<Tab>
-						Cost Reports
+						<p>Cost Reports</p>
 					</Tab>
 					<Tab>
-						Utilization Reports
+						<p>Utilization Reports</p>
 					</Tab>
 				</TabList>
 				<TabPanel>

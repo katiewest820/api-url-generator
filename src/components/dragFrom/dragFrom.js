@@ -3,32 +3,6 @@ import {render} from 'react-dom';
 import {SortableContainer, SortableElement, arrayMove} from 'react-sortable-hoc';
 import './dragFrom.css';
 
-// const SortableItem = SortableElement(({idx, value, onRemove}) => {
-//     return (
-//       <li>
-//         {value}
-//         <button key={`input-${value}`}> Remove </button>
-//       </li>
-//     );
-// });
-
-// const SortableList = SortableContainer(({items, onRemove}) => {
-//   console.log(items)
-//   return (
-//     <ul>
-//       {items.map((value, index, onRemove) => (
-        
-//           <SortableItem 
-//             key={`item-${index}`} 
-//             index={index} 
-//             value={value}
-//             onRemove={onRemove} 
-//             idx={index}
-//           />
-//       ))}
-//     </ul>
-//   );
-// });
 
 export default class SortableComponent extends React.Component {
 	constructor(props){
@@ -53,7 +27,9 @@ export default class SortableComponent extends React.Component {
 
 
     onRemove(index){
+      console.log(index)
       let deletedValue = this.state.items[index];
+      console.log(deletedValue)
       this.state.items.splice(index,1);
       this.state.indexVal.splice(index, 1);
       this.setState({
