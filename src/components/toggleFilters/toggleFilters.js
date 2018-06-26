@@ -1,4 +1,6 @@
 import React from 'react';
+import {costMetrics} from '../metrics_dimensions/metrics';
+import {costDimensions} from '../metrics_dimensions/dimensions';
 
 export default class ToggleFilters extends React.Component {
 	constructor(props){
@@ -19,14 +21,18 @@ export default class ToggleFilters extends React.Component {
 	
 	render(){
 		if(this.state.active == true){
+			let filterDimensionOptions = costDimensions.map((item, index) => {
+	    		return <option value={item.value} onClick={e => this.setState({parameter: e.target.value})}>{item.label}</option>
+			})
+			let filterMetricOptions = costMetrics.map((item, index) => {
+				return <option value={item.value} onClick={e => this.setState({parameter: e.target.value})}>{item.label}</option>
+			})
 			return(
 				<div className="filterDiv">
 	    			<select value={this.state.parameter} onChange={e => this.setState({parameter: e.target.value})}>
 	    				<option></option>
-	    				<option value="test" onClick={e => this.setState({parameter: e.target.value})}>test</option>
-	    				<option value="test2" onClick={e => this.setState({parameter: e.target.value})}>test</option>
-	    				<option value="test3" onClick={e => this.setState({parameter: e.target.value})}>test</option>
-	    				<option value="test4" onClick={e => this.setState({parameter: e.target.value})}>test</option>
+	    				{filterDimensionOptions}
+	    				{filterMetricOptions}
 	    			</select>
 	    			
 	    			<select value={this.state.selectedFilter} onChange={e => this.setState({selectedFilter: e.target.value})}>

@@ -5,6 +5,8 @@ import Moment from 'moment';
 import ToggleFilters from '../toggleFilters/toggleFilters';
 import ToggleParams from '../toggleParams/toggleParams';
 import Select from 'react-select';
+import {costDimensions} from '../metrics_dimensions/dimensions';
+import {costMetrics} from '../metrics_dimensions/metrics';
 import '../../../node_modules/react-select/dist/react-select.css';
 
 export default class CostReport extends React.Component{
@@ -53,23 +55,12 @@ export default class CostReport extends React.Component{
 				this.setState({props: this.state.props})
 			}
 		}
-		
   		this.state.props.push(`${key}:${value}`);
   		let newItemsList = this.state.props;
-
   		let nextIndexVal = this.state.props.length -1;
 		this.state.indexVal.push(nextIndexVal);
 		this.passItemBackToParent(this.state.props, "");
 		console.log(nextIndexVal)
-  		// let nextIndexVal = 0;
-    // 	if(this.state.props.length > 0){
-    // 		let nextIndexVal = this.state.props.length;
-    // 		this.state.indexVal.push(nextIndexVal);
-    //   	}else{
-    //   		nextIndexVal = 0;
-  		// 	this.state.indexVal.push(nextIndexVal);
-    //   	}
-  		// this.passItemBackToParent(this.state.props, "")
   	}
 
   	addFilter(key, value, filter){
@@ -79,20 +70,10 @@ export default class CostReport extends React.Component{
   		this.setState({selectedFilter: filter});
   		this.state.props.push(`filters:${key}${filter}${value}`);
   		let newItemsList = this.state.props;
-  		//let nextIndexVal;
-  		//if(this.state.props.length > 0){
-  			let nextIndexVal = this.state.props.length -1;
-  			this.state.indexVal.push(nextIndexVal);
-  			this.passItemBackToParent(this.state.props, "");
-  			console.log(nextIndexVal)
-  		// }else{
-  		// 	nextIndexVal = 0;
-  		// 	this.state.indexVal.push(nextIndexVal);
-  		// 	this.passItemBackToParent(this.state.props, "");
-  		// 	console.log(nextIndexVal)
-  		// }
-  		
-  		
+		let nextIndexVal = this.state.props.length -1;
+		this.state.indexVal.push(nextIndexVal);
+		this.passItemBackToParent(this.state.props, "");
+		console.log(nextIndexVal)
   	}
 
   	addDates(start, end){
@@ -191,48 +172,6 @@ export default class CostReport extends React.Component{
 	    			<ToggleParams addParameter={this.addParameter.bind(this)}/>
 	    			<ToggleFilters addFilter={this.addFilter.bind(this)}/>
 	    		</div>
-		    		{/*<div className="paramDiv">
-		    			<label>Parameters:
-		    			<select value={this.state.parameter} onChange={e => this.setState({parameter: e.target.value})}>
-		    				<option></option>
-		    				<option value="sort_by" onClick={e => this.setState({parameter: e.target.value})}>Sort By</option>
-		    				<option value="order" onClick={e => this.setState({parameter: e.target.value})}>Order (asc or desc)</option>
-		    				<option value="offset" onClick={e => this.setState({parameter: e.target.value})}>Ofset (number)</option>
-		    				<option value="max_results" onClick={e => this.setState({parameter: e.target.value})}>Max Results (number)</option>
-		    			</select>
-		    			</label>
-		    			<input type="text" onChange={e => this.setState({parameterInput: e.target.value})}/>
-		    			<button onClick={this.addParamenter.bind(this)}>Add</button>
-					</div>
-					<div>
-						
-					</div>
-				</div>
-				<div className="filterDiv">
-	    			<label>Filter By:
-	    			<select value={this.state.parameter} onChange={e => this.setState({parameter: e.target.value})}>
-	    				<option></option>
-	    				<option value="test" onClick={e => this.setState({parameter: e.target.value})}>test</option>
-	    				<option value="test2" onClick={e => this.setState({parameter: e.target.value})}>test</option>
-	    				<option value="test3" onClick={e => this.setState({parameter: e.target.value})}>test</option>
-	    				<option value="test4" onClick={e => this.setState({parameter: e.target.value})}>test</option>
-	    			</select>
-	    			</label>
-	    			<select value={this.state.selectedFilter} onChange={e => this.setState({selectedFilter: e.target.value})}>
-	    				<option></option>
-	    				<option value="==" onClick={e => this.setState({selectedFilter: e.target.value})}>equals</option>
-	    				<option value="!=" onClick={e => this.setState({selectedFilter: e.target.value})}>not equals</option>
-	    				<option value="<" onClick={e => this.setState({selectedFilter: e.target.value})}>less than</option>
-	    				<option value=">" onClick={e => this.setState({selectedFilter: e.target.value})}>greater than</option>
-	    				<option value="<=" onClick={e => this.setState({selectedFilter: e.target.value})}>less than or equals</option>
-	    				<option value=">=" onClick={e => this.setState({selectedFilter: e.target.value})}>greater than or equals</option>
-	    				<option value="=@" onClick={e => this.setState({selectedFilter: e.target.value})}>contains</option>
-	    				<option value="!=@" onClick={e => this.setState({selectedFilter: e.target.value})}>does not contain</option>
-	    			</select>
-	    			<input type="text" onChange={e => this.setState({parameterInput: e.target.value})}/>
-	    			<button onClick={this.addFilter.bind(this)}>Add</button>
-	    		</div>*/}
-	    		
 	    		<div className="csvDiv">
 	    			<label>CSV Format</label>
 	    			<input type="checkbox" onClick={this.csvReport.bind(this)}/>
@@ -245,42 +184,7 @@ export default class CostReport extends React.Component{
 						        name="form-field-name"
 						        value={this.state.selectedDimensionOption}
 						        onChange={this.handleDimensionChange}
-						        options={[
-						          { value: 'date', key: 'dimension', label: 'Date', clearableValue: false },
-						          { value: 'day', key: 'dimension', label: 'Day', clearableValue: false },
-						          { value: 'day_of_week', key: 'dimension', label: 'Day of Week', clearableValue: false },
-						          { value: 'year', key: 'dimension', label: 'Year', clearableValue: false },
-						          { value: 'month', key: 'dimension', label: 'Month (Category)', clearableValue: false },
-						          { value: 'year_month', key: 'dimension', label: 'Month (Year)', clearableValue: false },
-						          { value: 'week', key: 'dimension', label: 'Week (Category)', clearableValue: false },
-						          { value: 'year_week', key: 'dimension', label: 'Week (Year)', clearableValue: false },
-						          { value: 'compute_usage_type', key: 'dimension', label: 'Compute Usage Type', clearableValue: false },
-						          { value: 'engine', key: 'dimension', label: 'Engine', clearableValue: false },
-						          { value: 'instance_category', key: 'dimension', label: 'Instance Category', clearableValue: false },
-						          { value: 'instance_family', key: 'dimension', label: 'Instance Family', clearableValue: false },
-						          { value: 'instance_size', key: 'dimension', label: 'Instance Size', clearableValue: false },
-						          { value: 'instance_type', key: 'dimension', label: 'Instance Type', clearableValue: false },
-						          { value: 'lease_type', key: 'dimension', label: 'Lease Type', clearableValue: false },
-						          { value: 'operating_system', key: 'dimension', label: 'Operating System', clearableValue: false },
-						          { value: 'operation', key: 'dimension', label: 'Operation', clearableValue: false },
-						          { value: 'reservation_identifier', key: 'dimension', label: 'Reservation ID', clearableValue: false },
-						          { value: 'resource_identifier', key: 'dimension', label: 'Resource ID', clearableValue: false },
-						          { value: 'transaction_type', key: 'dimension', label: 'Transaction Type', clearableValue: false },
-						          { value: 'usage_family', key: 'dimension', label: 'Usage Family', clearableValue: false },
-						          { value: 'usage_type', key: 'dimension', label: 'Usage Type', clearableValue: false },
-						          { value: 'vendor_account_identifier', key: 'dimension', label: 'Account ID', clearableValue: false },
-						          { value: 'vendor_account_name', key: 'dimension', label: 'Account Name', clearableValue: false },
-						          { value: 'region_zone', key: 'dimension', label: 'Availability Zone', clearableValue: false },
-						          { value: 'item_description', key: 'dimension', label: 'Item Description', clearableValue: false },
-						          { value: 'account_identifier', key: 'dimension', label: 'Payer Account ID', clearableValue: false },
-						          { value: 'account_name', key: 'dimension', label: 'Payer Account Name', clearableValue: false },
-						          { value: 'service_name', key: 'dimension', label: 'Product Name', clearableValue: false },
-						          { value: 'region', key: 'dimension', label: 'Region', clearableValue: false },
-						          { value: 'seller', key: 'dimension', label: 'Seller', clearableValue: false },
-						          { value: 'enhanced_service_name', key: 'dimension', label: 'Service Name', clearableValue: false },
-						          { value: 'vendor', key: 'dimension', label: 'Vendor', clearableValue: false },
-						          { value: 'zone', key: 'dimension', label: 'Zone', clearableValue: false },
-						        ]}
+						        options={ costDimensions }	
 						    />
 				    </div>
 				    <div>
@@ -290,15 +194,7 @@ export default class CostReport extends React.Component{
 						        name="form-field-name"
 						        value={this.state.selectedMetricOption}
 						        onChange={this.handleMetricChange}
-						        options={[
-						          { value: 'unblended_cost', key: 'metrics', label: 'Cost (Total)', clearableValue: false },
-						          { value: 'adjusted_cost', key: 'metrics', label: 'Cost (Adjusted)', clearableValue: false },
-						          { value: 'total_amortized_cost', key: 'metrics', label: 'Cost (Amortized)', clearableValue: false },
-						          { value: 'invoiced_cost', key: 'metrics', label: 'Cost (Total Blended)', clearableValue: false },
-						          { value: 'cost_adjusted', key: 'metrics', label: 'Cost Adjustment', clearableValue: false },
-						          { value: 'blended_rate', key: 'metrics', label: 'Rate (Blended)', clearableValue: false },
-						          { value: 'unblended_rate', key: 'metrics', label: 'Rate (Unblended)', clearableValue: false },					          
-						        ]}
+						        options={costMetrics}
 						    />
 				    </div>
 				</div>
