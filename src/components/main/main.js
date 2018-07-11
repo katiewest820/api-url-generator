@@ -3,6 +3,7 @@ import './main.css'
 import 'react-tabs/style/react-tabs.css';
 import CostReport from '../costReport/costReport';
 import UtilReport from '../utilReport/utilReport';
+import Documentation from '../documentation/documentation';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 export default class Main extends React.Component{
@@ -26,10 +27,10 @@ export default class Main extends React.Component{
 					</Tab>
 				</TabList>
 				<TabPanel>
-					<p>Docs tab</p>
+					<Documentation/>
 				</TabPanel>
 				<TabPanel>
-					<p>Docs tab</p>
+					<Documentation/>
 				</TabPanel>
 				<TabPanel>
 					<CostReport/>

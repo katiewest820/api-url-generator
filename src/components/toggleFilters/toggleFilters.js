@@ -1,6 +1,7 @@
 import React from 'react';
 import {costMetrics} from '../metrics_dimensions/metrics';
 import {costDimensions} from '../metrics_dimensions/dimensions';
+import './toggleFilters.css';
 
 export default class ToggleFilters extends React.Component {
 	constructor(props){
@@ -29,6 +30,7 @@ export default class ToggleFilters extends React.Component {
 			})
 			return(
 				<div className="filterDiv">
+					<button className="close" onClick={e => this.setState({active: false})}><i class="fas fa-times"></i></button>
 	    			<select value={this.state.parameter} onChange={e => this.setState({parameter: e.target.value})}>
 	    				<option></option>
 	    				{filterDimensionOptions}
@@ -47,8 +49,8 @@ export default class ToggleFilters extends React.Component {
 	    				<option value="!=@" onClick={e => this.setState({selectedFilter: e.target.value})}>does not contain</option>
 	    			</select>
 	    			<input type="text" onChange={e => this.setState({parameterInput: e.target.value})}/>
-	    			<button onClick={this.passFilterBackToReport.bind(this)}>Add</button>
-	    			<button onClick={e => this.setState({active: false})}>Cancel</button>
+	    			<button className="add" onClick={this.passFilterBackToReport.bind(this)}>Add</button>
+	    			
 	    		</div>
 	    	)} else {
 	    		return(

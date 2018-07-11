@@ -2,8 +2,11 @@ import React from 'react';
 import DragFrom from '../dragFrom/dragFrom';
 import DatePicker from '../datePicker/datePicker';
 import Moment from 'moment';
-
+import ToggleFilters from '../toggleFilters/toggleFilters';
+import ToggleParams from '../toggleParams/toggleParams';
 import Select from 'react-select';
+import {utilMetrics} from '../metrics_dimensions/metrics';
+import {utilDimensions} from '../metrics_dimensions/dimensions';
 import '../../../node_modules/react-select/dist/react-select.css';
 
 export default class UtilReport extends React.Component{
@@ -63,6 +66,19 @@ export default class UtilReport extends React.Component{
   		this.passItemBackToParent(this.state.props, "")
   	}
 
+  	addFilter(key, value, filter){
+  		console.log(this.state.parameter);
+  		this.setState({parameter: key});
+  		this.setState({parameterInput: value});
+  		this.setState({selectedFilter: filter});
+  		this.state.props.push(`filters:${key}${filter}${value}`);
+  		let newItemsList = this.state.props;
+		let nextIndexVal = this.state.props.length -1;
+		this.state.indexVal.push(nextIndexVal);
+		this.passItemBackToParent(this.state.props, "");
+		console.log(nextIndexVal)
+  	}
+
   	addDates(start, end){
   		let startDate = Moment(start).format('YYYY-MM-DD')
   		let endDate = Moment(end).format('YYYY-MM-DD')
@@ -109,6 +125,8 @@ export default class UtilReport extends React.Component{
   		let metrics_dimensions = string.replace(/,/g, '&');
   		this.generateApiUrl(metrics_dimensions)
   	}
+
+
   		
   	generateApiUrl(metrics_dimensions){
   		console.log(this.state.apiVersion)
@@ -131,7 +149,7 @@ export default class UtilReport extends React.Component{
   		}, 200)
   	}
 
-  	addParamenter(){
+  	addParameter(){
   		this.selectItems(this.state.parameter, this.state.parameterInput)
   	}
 
@@ -149,18 +167,10 @@ export default class UtilReport extends React.Component{
 		}
 		return(
 			<div className="reportBuildDiv">
-				
 	    		<DatePicker addDates={this.addDates.bind(this)}/>
-	    		<div>
-	    			<select value={this.state.parameter} onChange={e => this.setState({parameter: e.target.value})}>
-	    				<option></option>
-	    				<option value="sort_by" onClick={e => this.setState({parameter: e.target.value})}>Sort By</option>
-	    				<option value="order" onClick={e => this.setState({parameter: e.target.value})}>Order (asc or desc)</option>
-	    				<option value="ofset" onClick={e => this.setState({parameter: e.target.value})}>Ofset (number)</option>
-	    				<option value="max_results" onClick={e => this.setState({parameter: e.target.value})}>Max Results (number)</option>
-	    			</select>
-	    			<input type="text" onChange={e => this.setState({parameterInput: e.target.value})}/>
-	    			<button onClick={this.addParamenter.bind(this)}>Add</button>
+	    		<div className="paramAndFilterDivs">
+	    			<ToggleParams addParameter={this.addParameter.bind(this)}/>
+	    			<ToggleFilters addFilter={this.addFilter.bind(this)}/>
 	    		</div>
 	    		<div className="csvDiv">
 	    			<label>CSV Format</label>
@@ -174,50 +184,7 @@ export default class UtilReport extends React.Component{
 						        name="form-field-name"
 						        value={this.state.selectedDimensionOption}
 						        onChange={this.handleDimensionChange}
-						        options={[
-						          { value: 'date', key: 'dimension', label: 'Date', clearableValue: false },
-						          { value: 'day', key: 'dimension', label: 'Day', clearableValue: false },
-						          { value: 'day_of_week', key: 'dimension', label: 'Day of Week', clearableValue: false },
-						          { value: 'year', key: 'dimension', label: 'Year', clearableValue: false },
-						          { value: 'month', key: 'dimension', label: 'Month', clearableValue: false },
-						          { value: 'week', key: 'dimension', label: 'Week', clearableValue: false },
-						          { value: 'hour', key: 'dimension', label: 'Hour', clearableValue: false },
-						          { value: 'launch_date', key: 'dimension', label: 'Launch Date', clearableValue: false },
-						          { value: 'launch_day', key: 'dimension', label: 'Launch Day', clearableValue: false },
-						          { value: 'launch_day_of_week', key: 'dimension', label: 'Launch Day of Week', clearableValue: false },
-						          { value: 'launch_month', key: 'dimension', label: 'Launch Month', clearableValue: false },
-						          { value: 'launch_time', key: 'dimension', label: 'Launch Time', clearableValue: false },
-						          { value: 'launch_week', key: 'dimension', label: 'Launch Week', clearableValue: false },
-						          { value: 'launch_year', key: 'dimension', label: 'Launch Year', clearableValue: false },
-						          { value: 'zone', key: 'dimension', label: 'Zone', clearableValue: false },
-						          { value: 'attached_instance_id', key: 'dimension', label: 'Attached Instance Identifier', clearableValue: false },
-						          { value: 'region_zone', key: 'dimension', label: 'Availability Zone', clearableValue: false },
-						          { value: 'instance_category', key: 'dimension', label: 'Instance Category', clearableValue: false },
-						          { value: 'region', key: 'dimension', label: 'Region', clearableValue: false },
-						          { value: 'instance_identifier', key: 'dimension', label: 'Instance ID', clearableValue: false },
-						          { value: 'instance_name', key: 'dimension', label: 'Instance Name', clearableValue: false },
-						          { value: 'instance_size', key: 'dimension', label: 'Instance Type', clearableValue: false },
-						          { value: 'table_name', key: 'dimension', label: 'Table Name', clearableValue: false },
-						          { value: 'tenancy', key: 'dimension', label: 'Tenancy', clearableValue: false },
-						          { value: 'volume_identifier', key: 'dimension', label: 'Volume Identifier', clearableValue: false },
-						          { value: 'dns_name', key: 'dimension', label: 'DNS Name', clearableValue: false },
-						          { value: 'ip_address', key: 'dimension', label: 'IP Address', clearableValue: false },
-						          { value: 'private_dns_name', key: 'dimension', label: 'Private DNS Name', clearableValue: false },
-						          { value: 'private_ip_address', key: 'dimension', label: 'Private IP', clearableValue: false },
-						          { value: 'subnet', key: 'dimension', label: 'Subnet ID', clearableValue: false },
-						          { value: 'vpc_id', key: 'dimension', label: 'VPC Identifier', clearableValue: false },
-						          { value: 'architecture', key: 'dimension', label: 'Architecture', clearableValue: false },
-						          { value: 'operating_system', key: 'dimension', label: 'OS', clearableValue: false },
-						          { value: 'virtualization_type', key: 'dimension', label: 'Virtualization', clearableValue: false },
-						          { value: 'days_since_launch', key: 'dimension', label: 'Days Alive', clearableValue: false },
-						          { value: 'storage_type', key: 'dimension', label: 'Storage Type', clearableValue: false },
-						          { value: 'vendor_account_identifier', key: 'dimension', label: 'Account ID', clearableValue: false },
-						          { value: 'vendor_account_name', key: 'dimension', label: 'Account Name', clearableValue: false },
-						          { value: 'image', key: 'dimension', label: 'AMI', clearableValue: false },
-						          { value: 'product_name', key: 'dimension', label: 'Product Name', clearableValue: false },
-						          { value: 'security_group_id', key: 'dimension', label: 'Security Group ID', clearableValue: false },
-						          { value: 'security_group_name', key: 'dimension', label: 'Security Groups Names', clearableValue: false },
-						        ]}
+						        options={utilDimensions}
 						    />
 				    </div>
 				   	<div>
@@ -227,15 +194,7 @@ export default class UtilReport extends React.Component{
 					        name="form-field-name"
 					        value={this.state.selectedMetricOption}
 					        onChange={this.handleMetricChange}
-					        options={[
-					          { value: 'unblended_cost', key: 'metrics', label: 'Cost (Total)', clearableValue: false },
-					          { value: 'adjusted_cost', key: 'metrics', label: 'Cost (Adjusted)', clearableValue: false },
-					          { value: 'total_amortized_cost', key: 'metrics', label: 'Cost (Amortized)', clearableValue: false },
-					          { value: 'invoiced_cost', key: 'metrics', label: 'Cost (Total Blended)', clearableValue: false },
-					          { value: 'cost_adjusted', key: 'metrics', label: 'Cost Adjustment', clearableValue: false },
-					          { value: 'blended_rate', key: 'metrics', label: 'Rate (Blended)', clearableValue: false },
-					          { value: 'unblended_rate', key: 'metrics', label: 'Rate (Unblended)', clearableValue: false },					          
-					        ]}
+					        options={utilMetrics}
 					    />
 				    </div>
 				</div>
