@@ -1,0 +1,11 @@
+.filterSubmit{
+	width: 80px;
+	margin-top: 10px;
+    justify-self: center;
+    color: white;
+    background: #67a7d8;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 8px;
+}

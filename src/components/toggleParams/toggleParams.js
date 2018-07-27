@@ -58,35 +58,36 @@ export default class ToggleParams extends React.Component {
 			})
 			return(
 	    		<div className="paramDiv">
-	    			<button className="close" onClick={e => this.setState({active: false})}><i class="fas fa-times"></i></button>
+	    			<button className="close" onClick={e => this.setState({active: false})}><i className="fas fa-times"></i></button>
 
-	    			<label>Params</label>
-	    			<select value={this.state.parameter} onChange={e => this.setState({parameter: e.target.value})}>
-	    				<option></option>
-	    				<option value="offset" onClick={e => this.setState({parameter: e.target.value})}>Ofset (number)</option>
-	    				<option value="max_results" onClick={e => this.setState({parameter: e.target.value})}>Max Results (number)</option>
-	    			</select>
-	    			<input type="text" onChange={e => this.setState({parameterInput: e.target.value})}/>
-
-	    			<label>Sort By</label>
-	    			<select onChange={e => this.sortBy(e.target.value)}>
-	    				<option></option>
-	    				{filterMetricOptions}
-	    				{filterDimensionOptions}
-	    			</select>
-	    			<select onChange={e => this.orderBy(e.target.value)}>
-	    				<option></option>
-	    				<option value="asc">Asc</option>
-	    				<option value="desc">Desc</option>
-	    			</select>
-	    			<button className="add" onClick={this.passParameterToReport.bind(this)}>Add</button>
+	    			<label className="paramsLabel">Params</label>
+		    			<select value={this.state.parameter} onChange={e => this.setState({parameter: e.target.value})}>
+		    				<option></option>
+		    				<option value="offset" onClick={e => this.setState({parameter: e.target.value})}>Ofset (number)</option>
+		    				<option value="max_results" onClick={e => this.setState({parameter: e.target.value})}>Max Results (number)</option>
+		    			</select>
+	    				<input type="text" onChange={e => this.setState({parameterInput: e.target.value})}/>
+	    				<button className="filterSubmit" onClick={this.passParameterToReport.bind(this)}>Submit</button>
+	    			
+	    			<label className="sortByLabel">Sort By</label>
+		    			<select onChange={e => this.sortBy(e.target.value)}>
+		    				<option></option>
+		    				{filterMetricOptions}
+		    				{filterDimensionOptions}
+		    			</select>
+		    			<select onChange={e => this.orderBy(e.target.value)}>
+		    				<option></option>
+		    				<option value="asc">Asc</option>
+		    				<option value="desc">Desc</option>
+		    			</select>
+		    			<button className="filterSubmit" onClick={this.passParameterToReport.bind(this)}>Submit</button>
 	    			
 				</div>	
 			)
 		} else {
 			return(
     			<div onClick={e => this.setState({active: true})}>
-    				Add Parameters <i className="fas fa-plus-circle"></i>
+    				Add Parameters <i className="fa fa-plus-circle fa-2x"></i>
     			</div>
     		)
 		}

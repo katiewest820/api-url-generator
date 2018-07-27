@@ -57,13 +57,33 @@
 	grid-gap: 30px;
     margin: auto;
     min-height: 200px;
-    width: 500px;
+    width: 50%;
 }
 
 .filterDiv, .paramDiv{
 	display: grid;
-    width: 200px;
+    width: 100%;
     border: 3px solid black;
     padding: 30px;
+    grid-gap: 5px;
+}
+
+.filterDiv{
+	position: absolute;
+    background: white;
+    width: 15%;
+    right: 30%;
+}
+
+.filterDiv label,  .paramDiv label{
+	color: grey;
+	justify-self: left;
+	
+}
+
+.paramDiv{
+	position: absolute;
+	width: 15%;
+	background-color: white;
 }
 

@@ -31,14 +31,15 @@ export default class ToggleFilters extends React.Component {
 			return(
 				<div className="filterDiv">
 					<button className="close" onClick={e => this.setState({active: false})}><i class="fas fa-times"></i></button>
+					<label>Measure</label>
 	    			<select value={this.state.parameter} onChange={e => this.setState({parameter: e.target.value})}>
-	    				<option></option>
+	    				<option disabled></option>
 	    				{filterDimensionOptions}
 	    				{filterMetricOptions}
 	    			</select>
-	    			
+	    			<label>Operator</label>
 	    			<select value={this.state.selectedFilter} onChange={e => this.setState({selectedFilter: e.target.value})}>
-	    				<option></option>
+	    				<option disabled></option>
 	    				<option value="==" onClick={e => this.setState({selectedFilter: e.target.value})}>equals</option>
 	    				<option value="!=" onClick={e => this.setState({selectedFilter: e.target.value})}>not equals</option>
 	    				<option value="<" onClick={e => this.setState({selectedFilter: e.target.value})}>less than</option>
@@ -48,14 +49,15 @@ export default class ToggleFilters extends React.Component {
 	    				<option value="=@" onClick={e => this.setState({selectedFilter: e.target.value})}>contains</option>
 	    				<option value="!=@" onClick={e => this.setState({selectedFilter: e.target.value})}>does not contain</option>
 	    			</select>
+	    			<label>Value</label>
 	    			<input type="text" onChange={e => this.setState({parameterInput: e.target.value})}/>
-	    			<button className="add" onClick={this.passFilterBackToReport.bind(this)}>Add</button>
+	    			<button onClick={this.passFilterBackToReport.bind(this)} className="filterSubmit">Submit</button>
 	    			
 	    		</div>
 	    	)} else {
 	    		return(
 	    			<div onClick={e => this.setState({active: true})}>
-	    				Add Filter <i className="fas fa-plus-circle"></i>
+	    				Add Filter <i className="fa fa-plus-circle fa-2x"></i>
 	    			</div>)
 	    	}
 		
