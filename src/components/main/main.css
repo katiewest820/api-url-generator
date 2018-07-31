@@ -73,6 +73,9 @@
     background: white;
     width: 15%;
     right: 30%;
+    top: 55%;
+    border-radius: 3%;
+
 }
 
 .filterDiv label,  .paramDiv label{
@@ -83,7 +86,10 @@
 
 .paramDiv{
 	position: absolute;
-	width: 15%;
 	background-color: white;
+	width: 15%;
+    top: 55%;
+    left: 30%;
+    border-radius: 3%;
 }
 

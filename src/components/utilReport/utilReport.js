@@ -15,6 +15,7 @@ export default class UtilReport extends React.Component{
 		this.state = {
 			apiVersion: 'https://app.cloudability.com/api/1/reporting/run?auth_token=[YOUR AUTH TOKEN]', 
 			props: [],
+			labels: [],
 			indexVal: [],
 			generatedUrl: '',
 			parameter: '',
@@ -25,8 +26,10 @@ export default class UtilReport extends React.Component{
 	}
 
 	handleDimensionChange = (selectedDimensionOption) => {
-		console.log(selectedDimensionOption)
+		
 		let index = selectedDimensionOption.length -1;
+		this.state.labels.push(selectedDimensionOption[index].label);
+		
     	this.setState({ selectedDimensionOption: selectedDimensionOption });
     	if(selectedDimensionOption){
     		this.selectItems(selectedDimensionOption[index].key, selectedDimensionOption[index].value)
@@ -34,8 +37,10 @@ export default class UtilReport extends React.Component{
   	}
 
   	handleMetricChange = (selectedMetricOption) => {
-		console.log(selectedMetricOption)
+		
 		let index = selectedMetricOption.length -1;
+		this.state.labels.push(selectedMetricOption[index].label);
+		
     	this.setState({ selectedMetricOption: selectedMetricOption });
     	if(selectedMetricOption){
     		this.selectItems(selectedMetricOption[index].key, selectedMetricOption[index].value)
@@ -51,23 +56,23 @@ export default class UtilReport extends React.Component{
 			});
 			if(isThereDate != -1){
 				this.state.props.splice(isThereDate, 1)
+				this.state.labels.splice(isThereDate, 1)
 				this.setState({props: this.state.props})
+				this.setState({labels: this.state.labels})
 			}
 		}
-		
   		this.state.props.push(`${key}:${value}`);
-  		let newItemsList = this.state.props;
+  		this.state.labels.push(`${key}:${value}`);
   		let nextIndexVal;
     	if(this.state.props.length > 0){
     		let nextIndexVal = this.state.props.length -1;
       		this.state.indexVal.push(nextIndexVal)
       	}
-
   		this.passItemBackToParent(this.state.props, "")
   	}
 
   	addFilter(key, value, filter){
-  		console.log(this.state.parameter);
+  		
   		this.setState({parameter: key});
   		this.setState({parameterInput: value});
   		this.setState({selectedFilter: filter});
@@ -76,7 +81,7 @@ export default class UtilReport extends React.Component{
 		let nextIndexVal = this.state.props.length -1;
 		this.state.indexVal.push(nextIndexVal);
 		this.passItemBackToParent(this.state.props, "");
-		console.log(nextIndexVal)
+		
   	}
 
   	addDates(start, end){
@@ -86,30 +91,33 @@ export default class UtilReport extends React.Component{
   		this.selectItems('end_date', endDate)
   	}
 
+  	
+  	passLabelBackToParent(labels){
+  		this.setState({labels: labels});
+  	}
+
   	passItemBackToParent(items, deletedValue){
-  		console.log(deletedValue)
+  		
   		if(deletedValue.length > 0){
   			let key = deletedValue.split(":")
-  			console.log(key)
+  			
   			if(key[0] == 'dimension'){
 	  			this.state.selectedDimensionOption.map((item, index)   => {
-	  				console.log(item)
-	  				console.log(index)
+	  				
 	  				if(item.value == key[1]){
 	  					this.state.selectedDimensionOption.splice(index, 1)
 	  					this.setState({selectedDimensionOption: this.state.selectedDimensionOption})
 	  				}
 	  			})
   			}else if(key[0] == 'metrics'){
-  				console.log(this.state.selectedMetricOption)
+  				
   				this.state.selectedMetricOption.map((item, index)   => {
-	  				console.log(item)
-	  				console.log(index)
+	  				
 	  				if(item.value == key[1]){
 	  					this.state.selectedMetricOption.splice(index, 1)
 	  					this.setState({selectedMetricOption: this.state.selectedMetricOption})
 	  				}
-	  			})
+	  			});
   			} else {
   				this.state.props.map((item, index) => {
   					let propKey = item.split(":");
@@ -129,15 +137,14 @@ export default class UtilReport extends React.Component{
 
   		
   	generateApiUrl(metrics_dimensions){
-  		console.log(this.state.apiVersion)
+  		
   	 	let result = '';
   		result = `${this.state.apiVersion}/${metrics_dimensions}`
   		this.setState({generatedUrl: result})
   	}
 
   	csvReport(){
-  		console.log(this.state.apiVersion)
-  		console.log(this.state.apiVersion.includes('csv'))
+  		
   		if(this.state.apiVersion.includes('csv')){
   			console.log('yeahhh')
   			this.setState({apiVersion: 'https://app.cloudability.com/api/1/reporting/run?auth_token=[YOUR AUTH TOKEN]'})
@@ -154,7 +161,7 @@ export default class UtilReport extends React.Component{
   	}
 
 	render(){
-		console.log(this.state.props)
+		
 		let selectedOption = this.state.selectedOption;
 		let generatedUrl;
 		if(this.state.generatedUrl && this.state.props.length != 0){
@@ -198,7 +205,7 @@ export default class UtilReport extends React.Component{
 					    />
 				    </div>
 				</div>
-				<DragFrom items={this.state.props} indexVal={this.state.indexVal} passItemBackToParent={this.passItemBackToParent.bind(this)}/>
+				<DragFrom items={this.state.props} labels ={this.state.labels} indexVal={this.state.indexVal} passItemBackToParent={this.passItemBackToParent.bind(this)} passLabelBackToParent={this.passLabelBackToParent.bind(this)}/>
 				{generatedUrl}
 			</div>
 		)

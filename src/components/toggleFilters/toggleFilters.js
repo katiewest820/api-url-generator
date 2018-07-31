@@ -29,6 +29,11 @@ export default class ToggleFilters extends React.Component {
 				return <option value={item.value} onClick={e => this.setState({parameter: e.target.value})}>{item.label}</option>
 			})
 			return(
+				<div>
+					<div onClick={e => this.setState({active: true})} className="addFilterButton">
+						<p>Add Filter</p>
+	    				<i className="fa fa-plus-circle fa-2x"></i>
+	    			</div>
 				<div className="filterDiv">
 					<button className="close" onClick={e => this.setState({active: false})}><i class="fas fa-times"></i></button>
 					<label>Measure</label>
@@ -54,10 +59,12 @@ export default class ToggleFilters extends React.Component {
 	    			<button onClick={this.passFilterBackToReport.bind(this)} className="filterSubmit">Submit</button>
 	    			
 	    		</div>
+	    		</div>
 	    	)} else {
 	    		return(
-	    			<div onClick={e => this.setState({active: true})}>
-	    				Add Filter <i className="fa fa-plus-circle fa-2x"></i>
+	    			<div onClick={e => this.setState({active: true})} className="addFilterButton">
+	    				<p>Add Filter</p>
+	    				<i className="fa fa-plus-circle fa-2x"></i>
 	    			</div>)
 	    	}
 		
