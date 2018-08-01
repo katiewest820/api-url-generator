@@ -28,6 +28,7 @@ export default class UtilReport extends React.Component{
 	handleDimensionChange = (selectedDimensionOption) => {
 		
 		let index = selectedDimensionOption.length -1;
+		console.log(selectedDimensionOption)
 		this.state.labels.push(selectedDimensionOption[index].label);
 		
     	this.setState({ selectedDimensionOption: selectedDimensionOption });
@@ -39,7 +40,9 @@ export default class UtilReport extends React.Component{
   	handleMetricChange = (selectedMetricOption) => {
 		
 		let index = selectedMetricOption.length -1;
+		console.log(selectedMetricOption)
 		this.state.labels.push(selectedMetricOption[index].label);
+		console.log(this.state.labels)
 		
     	this.setState({ selectedMetricOption: selectedMetricOption });
     	if(selectedMetricOption){
@@ -48,6 +51,8 @@ export default class UtilReport extends React.Component{
   	}
 
 	selectItems(key, value){
+		console.log(key)
+		console.log(value)
 		//prevents more than two dates - overrides origional date of new date range selected 
 		if(key == 'start_date' || key == 'end_date'){
 			let isThereDate = this.state.props.findIndex( date => {
@@ -60,15 +65,20 @@ export default class UtilReport extends React.Component{
 				this.setState({props: this.state.props})
 				this.setState({labels: this.state.labels})
 			}
-		}
-  		this.state.props.push(`${key}:${value}`);
-  		this.state.labels.push(`${key}:${value}`);
-  		let nextIndexVal;
-    	if(this.state.props.length > 0){
-    		let nextIndexVal = this.state.props.length -1;
-      		this.state.indexVal.push(nextIndexVal)
-      	}
-  		this.passItemBackToParent(this.state.props, "")
+			this.state.props.push(`${key}:${value}`);
+  			this.state.labels.push(`${key}:${value}`);
+			
+		}else {
+	  		this.state.props.push(`${key}:${value}`);
+	  	}
+	  		//this.state.labels.push(`${key}:${value}`);
+	  		let nextIndexVal;
+	    	if(this.state.props.length > 0){
+	    		let nextIndexVal = this.state.props.length -1;
+	      		this.state.indexVal.push(nextIndexVal)
+	      	
+	  	}
+	  	this.passItemBackToParent(this.state.props, "")
   	}
 
   	addFilter(key, value, filter){
@@ -76,6 +86,7 @@ export default class UtilReport extends React.Component{
   		this.setState({parameter: key});
   		this.setState({parameterInput: value});
   		this.setState({selectedFilter: filter});
+  		this.state.labels.push(`${key} ${filter} ${value}`);
   		this.state.props.push(`filters:${key}${filter}${value}`);
   		let newItemsList = this.state.props;
 		let nextIndexVal = this.state.props.length -1;
@@ -92,8 +103,9 @@ export default class UtilReport extends React.Component{
   	}
 
   	
-  	passLabelBackToParent(labels){
+  	passLabelBackToParent(labels, indexVal){
   		this.setState({labels: labels});
+  		this.setState({indexVal: indexVal});
   	}
 
   	passItemBackToParent(items, deletedValue){
@@ -156,19 +168,31 @@ export default class UtilReport extends React.Component{
   		}, 200)
   	}
 
-  	addParameter(){
-  		this.selectItems(this.state.parameter, this.state.parameterInput)
+  	addParameter(parameter, parameterInput){
+  		this.setState({parameter: parameter});
+  		this.setState({parameterInput: parameterInput});
+  		this.state.labels.push(`${parameter}:${parameterInput}`);
+  		console.log(parameter)
+  		console.log(parameterInput)
+  		this.selectItems(parameter, parameterInput)
   	}
 
 	render(){
 		
 		let selectedOption = this.state.selectedOption;
-		let generatedUrl;
+		let generatedUrl = (
+			<div className="generatedUrlDiv"></div>);
 		if(this.state.generatedUrl && this.state.props.length != 0){
 			generatedUrl = (
 				<div className="generatedUrlDiv">
-					<p>Your API Url:</p>
-					<a href={this.state.generatedUrl} target="_blank">{this.state.generatedUrl}</a>
+					<div className="csvDiv">
+		    			<label>CSV Format</label>
+		    			<input type="checkbox" onClick={this.csvReport.bind(this)}/>
+		    		</div>
+					<div >
+						<p>Your API Url:</p>
+						<a href={this.state.generatedUrl} target="_blank">{this.state.generatedUrl}</a>
+					</div>
 				</div>
 			)
 		}
@@ -179,10 +203,7 @@ export default class UtilReport extends React.Component{
 	    			<ToggleParams addParameter={this.addParameter.bind(this)}/>
 	    			<ToggleFilters addFilter={this.addFilter.bind(this)}/>
 	    		</div>
-	    		<div className="csvDiv">
-	    			<label>CSV Format</label>
-	    			<input type="checkbox" onClick={this.csvReport.bind(this)}/>
-	    		</div>
+	    		
 	    		<div className="DimensionsMetrics">
 		    		<div>
 			    		<h2>Dimensions</h2>	
@@ -205,7 +226,7 @@ export default class UtilReport extends React.Component{
 					    />
 				    </div>
 				</div>
-				<DragFrom items={this.state.props} labels ={this.state.labels} indexVal={this.state.indexVal} passItemBackToParent={this.passItemBackToParent.bind(this)} passLabelBackToParent={this.passLabelBackToParent.bind(this)}/>
+				<DragFrom items={this.state.props} labels={this.state.labels} indexVal={this.state.indexVal} passItemBackToParent={this.passItemBackToParent.bind(this)} passLabelBackToParent={this.passLabelBackToParent.bind(this)}/>
 				{generatedUrl}
 			</div>
 		)

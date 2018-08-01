@@ -64,16 +64,17 @@ export default class CostReport extends React.Component{
   	}
 
   	addFilter(key, value, filter){
-  		console.log(this.state.parameter);
+  		
   		this.setState({parameter: key});
   		this.setState({parameterInput: value});
   		this.setState({selectedFilter: filter});
+  		this.state.labels.push(`${key} ${filter} ${value}`);
   		this.state.props.push(`filters:${key}${filter}${value}`);
   		let newItemsList = this.state.props;
 		let nextIndexVal = this.state.props.length -1;
 		this.state.indexVal.push(nextIndexVal);
 		this.passItemBackToParent(this.state.props, "");
-		console.log(nextIndexVal)
+		
   	}
 
   	addDates(start, end){
@@ -149,7 +150,11 @@ export default class CostReport extends React.Component{
   	}
 
   	addParameter(parameter, parameterInput){
-
+  		this.setState({parameter: parameter});
+  		this.setState({parameterInput: parameterInput});
+  		this.state.labels.push(`${parameter}:${parameterInput}`);
+  		console.log(parameter)
+  		console.log(parameterInput)
   		this.selectItems(parameter, parameterInput)
   	}
 

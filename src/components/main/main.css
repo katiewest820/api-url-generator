@@ -30,8 +30,12 @@
 }
 
 .generatedUrlDiv{
-	min-height: 80px;
+	min-height: 100px;
 	max-height: fit-content;
+}
+
+.generatedUrlDiv p{
+	margin-top: 0px;
 }
 
 .generatedUrlDiv a {
@@ -41,12 +45,16 @@
 }
 
 .csvDiv{
-	padding: 20px;
-
+	display: grid;
+    grid-template-columns: 2fr 1fr;
+    padding: 20px;
+    justify-content: left;
+    width: fit-content;
 }
 
 .csvDiv label{
 	padding-right: 10px;
+	font-weight: bold;
 }
 
 .paramAndFilterDivs{
@@ -64,7 +72,6 @@
 	display: grid;
     width: 100%;
     border: 3px solid black;
-    padding: 30px;
     grid-gap: 5px;
 }
 
@@ -73,9 +80,9 @@
     background: white;
     width: 15%;
     right: 30%;
-    top: 55%;
+    top: 50%;
     border-radius: 3%;
-
+    padding: 25px;
 }
 
 .filterDiv label,  .paramDiv label{
@@ -85,10 +92,11 @@
 }
 
 .paramDiv{
+	padding: 20px;
 	position: absolute;
 	background-color: white;
 	width: 15%;
-    top: 55%;
+    top: 50%;
     left: 30%;
     border-radius: 3%;
 }

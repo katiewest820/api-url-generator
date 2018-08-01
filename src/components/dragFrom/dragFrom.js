@@ -14,6 +14,7 @@ export default class SortableComponent extends React.Component {
         indexVal: props.indexVal,
         labels: props.labels
   		};
+
   	}
 
   	onSortEnd = ({oldIndex, newIndex}) => {
@@ -26,7 +27,7 @@ export default class SortableComponent extends React.Component {
       console.log(this.state.labels)
 
       this.props.passItemBackToParent(this.state.items, "")
-      this.props.passLabelBackToParent(this.state.labels)
+      this.props.passLabelBackToParent(this.state.labels, this.state.indexVal);
 
   	};
 
@@ -46,10 +47,11 @@ export default class SortableComponent extends React.Component {
       });
      
       this.props.passItemBackToParent(this.state.items, deletedValue)
-      this.props.passLabelBackToParent(this.state.labels)
+      this.props.passLabelBackToParent(this.state.labels, this.state.indexVal);
     }
 
   render() {
+    console.log(this.state)
     console.log(this.state.indexVal)
   
     let SortableItem = SortableElement(({value, onRemove}) => {
@@ -57,7 +59,7 @@ export default class SortableComponent extends React.Component {
       console.log(matchingIndex)
       console.log(this.state.labels)
       let label = this.state.labels[matchingIndex];
-
+      console.log(label)
       return (
         <li className="sortableItemLi">
           {label}
