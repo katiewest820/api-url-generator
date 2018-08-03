@@ -20,6 +20,7 @@ export default class UtilReport extends React.Component{
 			generatedUrl: '',
 			parameter: '',
 			parameterInput: '',
+			selectedFilter: '',
 			selectedDimensionOption: '',
 			selectedMetricOption: ''
 		}
@@ -38,12 +39,10 @@ export default class UtilReport extends React.Component{
   	}
 
   	handleMetricChange = (selectedMetricOption) => {
-		
 		let index = selectedMetricOption.length -1;
 		console.log(selectedMetricOption)
 		this.state.labels.push(selectedMetricOption[index].label);
 		console.log(this.state.labels)
-		
     	this.setState({ selectedMetricOption: selectedMetricOption });
     	if(selectedMetricOption){
     		this.selectItems(selectedMetricOption[index].key, selectedMetricOption[index].value)
@@ -82,7 +81,6 @@ export default class UtilReport extends React.Component{
   	}
 
   	addFilter(key, value, filter){
-  		
   		this.setState({parameter: key});
   		this.setState({parameterInput: value});
   		this.setState({selectedFilter: filter});
@@ -149,7 +147,6 @@ export default class UtilReport extends React.Component{
 
   		
   	generateApiUrl(metrics_dimensions){
-  		
   	 	let result = '';
   		result = `${this.state.apiVersion}/${metrics_dimensions}`
   		this.setState({generatedUrl: result})
@@ -169,9 +166,16 @@ export default class UtilReport extends React.Component{
   	}
 
   	addParameter(parameter, parameterInput){
+  		if(parameter == "sort_by"){
+  			this.state.labels.push(`sort by:${parameterInput}`);
+  		}
+  		else if(parameter == "max_results"){
+  			this.state.labels.push(`max results:${parameterInput}`);
+  		}else{
+  			this.state.labels.push(`${parameter}:${parameterInput}`);
+  		}
   		this.setState({parameter: parameter});
   		this.setState({parameterInput: parameterInput});
-  		this.state.labels.push(`${parameter}:${parameterInput}`);
   		console.log(parameter)
   		console.log(parameterInput)
   		this.selectItems(parameter, parameterInput)
@@ -180,8 +184,7 @@ export default class UtilReport extends React.Component{
 	render(){
 		
 		let selectedOption = this.state.selectedOption;
-		let generatedUrl = (
-			<div className="generatedUrlDiv"></div>);
+		let generatedUrl = (<div className="generatedUrlDiv"></div>);
 		if(this.state.generatedUrl && this.state.props.length != 0){
 			generatedUrl = (
 				<div className="generatedUrlDiv">

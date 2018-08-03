@@ -64,7 +64,7 @@
 	justify-items: center;
 	grid-gap: 30px;
     margin: auto;
-    min-height: 200px;
+    min-height: 270px;
     width: 50%;
 }
 
@@ -73,6 +73,7 @@
     width: 100%;
     border: 3px solid black;
     grid-gap: 5px;
+    top: 485px;
 }
 
 .filterDiv{
@@ -80,7 +81,6 @@
     background: white;
     width: 15%;
     right: 30%;
-    top: 50%;
     border-radius: 3%;
     padding: 25px;
 }
@@ -96,7 +96,6 @@
 	position: absolute;
 	background-color: white;
 	width: 15%;
-    top: 50%;
     left: 30%;
     border-radius: 3%;
 }

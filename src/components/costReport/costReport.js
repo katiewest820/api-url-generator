@@ -15,6 +15,7 @@ export default class CostReport extends React.Component{
 		this.state = {
 			apiVersion: 'https://app.cloudability.com/api/1/reporting/cost/run?auth_token=[YOUR AUTH TOKEN]', 
 			props: [],
+			labels: [],
 			indexVal: [],
 			generatedUrl: '',
 			parameter: '',
@@ -26,8 +27,9 @@ export default class CostReport extends React.Component{
 	}
 
 	handleDimensionChange = (selectedDimensionOption) => {
-		console.log(selectedDimensionOption)
 		let index = selectedDimensionOption.length -1;
+		console.log(selectedDimensionOption)
+		this.state.labels.push(selectedDimensionOption[index].label);
     	this.setState({ selectedDimensionOption: selectedDimensionOption });
     	if(selectedDimensionOption){
     		this.selectItems(selectedDimensionOption[index].key, selectedDimensionOption[index].value)
@@ -35,8 +37,10 @@ export default class CostReport extends React.Component{
   	}
 
   	handleMetricChange = (selectedMetricOption) => {
-		console.log(selectedMetricOption)
 		let index = selectedMetricOption.length -1;
+		console.log(selectedMetricOption)
+		this.state.labels.push(selectedMetricOption[index].label);
+		console.log(this.state.labels)
     	this.setState({ selectedMetricOption: selectedMetricOption });
     	if(selectedMetricOption){
     		this.selectItems(selectedMetricOption[index].key, selectedMetricOption[index].value)
@@ -44,6 +48,8 @@ export default class CostReport extends React.Component{
   	}
 
 	selectItems(key, value){
+		console.log(key)
+		console.log(value)
 		//prevents more than two dates - overrides origional date of new date range selected 
 		if(key == 'start_date' || key == 'end_date'){
 			let isThereDate = this.state.props.findIndex( date => {
@@ -52,19 +58,26 @@ export default class CostReport extends React.Component{
 			});
 			if(isThereDate != -1){
 				this.state.props.splice(isThereDate, 1)
+				this.state.labels.splice(isThereDate, 1)
 				this.setState({props: this.state.props})
+				this.setState({labels: this.state.labels})
 			}
-		}
-  		this.state.props.push(`${key}:${value}`);
-  		let newItemsList = this.state.props;
-  		let nextIndexVal = this.state.props.length -1;
-		this.state.indexVal.push(nextIndexVal);
-		this.passItemBackToParent(this.state.props, "");
-		console.log(nextIndexVal)
+			this.state.props.push(`${key}:${value}`);
+  			this.state.labels.push(`${key}:${value}`);
+			
+		}else {
+	  		this.state.props.push(`${key}:${value}`);
+	  	}
+	  		//this.state.labels.push(`${key}:${value}`);
+	  		let nextIndexVal;
+    	if(this.state.props.length > 0){
+    		let nextIndexVal = this.state.props.length -1;
+      		this.state.indexVal.push(nextIndexVal)
+	  	}
+	  	this.passItemBackToParent(this.state.props, "")
   	}
 
   	addFilter(key, value, filter){
-  		
   		this.setState({parameter: key});
   		this.setState({parameterInput: value});
   		this.setState({selectedFilter: filter});
@@ -84,37 +97,30 @@ export default class CostReport extends React.Component{
   		this.selectItems('end_date', endDate)
   	}
 
+  	passLabelBackToParent(labels, indexVal){
+  		this.setState({labels: labels});
+  		this.setState({indexVal: indexVal});
+  	}
+
   	passItemBackToParent(items, deletedValue){
-  		console.log(deletedValue)
   		if(deletedValue.length > 0){
   			let key = deletedValue.split(":")
-  			console.log(key)
-  			
-  			
   			if(key[0] == 'dimension'){
 	  			this.state.selectedDimensionOption.map((item, index)   => {
-	  				console.log(item)
-	  				console.log(index)
 	  				if(item.value == key[1]){
 	  					this.state.selectedDimensionOption.splice(index, 1)
 	  					this.setState({selectedDimensionOption: this.state.selectedDimensionOption})
 	  				}
 	  			})
   			}else if(key[0] == 'metrics'){
-  				console.log(this.state.selectedMetricOption)
   				this.state.selectedMetricOption.map((item, index)   => {
-	  				console.log(item)
-	  				console.log(index)
 	  				if(item.value == key[1]){
 	  					this.state.selectedMetricOption.splice(index, 1)
 	  					this.setState({selectedMetricOption: this.state.selectedMetricOption})
 	  				}
-	  			})
+	  			});
   			} else {
   				this.state.props.map((item, index) => {
-  					console.log(item)
-  					console.log(index)
-  					
   					let propKey = item.split(":");
   					if(propKey[1] == key[1]){
   						this.state.props.splice(index, 1)
@@ -150,9 +156,17 @@ export default class CostReport extends React.Component{
   	}
 
   	addParameter(parameter, parameterInput){
+  		if(parameter == "sort_by"){
+  			this.state.labels.push(`sort by:${parameterInput}`);
+  		}
+  		else if(parameter == "max_results"){
+  			this.state.labels.push(`max results:${parameterInput}`);
+  		}else{
+  			this.state.labels.push(`${parameter}:${parameterInput}`);
+  		}
   		this.setState({parameter: parameter});
   		this.setState({parameterInput: parameterInput});
-  		this.state.labels.push(`${parameter}:${parameterInput}`);
+  		
   		console.log(parameter)
   		console.log(parameterInput)
   		this.selectItems(parameter, parameterInput)
@@ -161,13 +175,19 @@ export default class CostReport extends React.Component{
 	render(){
 		console.log(this.state.props)
 		let selectedOption = this.state.selectedOption;
-		let generatedUrl;
+		let generatedUrl = (<div className="generatedUrlDiv"></div>);
 		if(this.state.generatedUrl && this.state.props.length != 0){
 			generatedUrl = (
-				<span>
-					<p>Your API Url:</p>
-					<a href={this.state.generatedUrl} target="_blank">{this.state.generatedUrl}</a>
-				</span>
+				<div className="generatedUrlDiv">
+					<div className="csvDiv">
+		    			<label>CSV Format</label>
+		    			<input type="checkbox" onClick={this.csvReport.bind(this)}/>
+		    		</div>
+					<div >
+						<p>Your API Url:</p>
+						<a href={this.state.generatedUrl} target="_blank">{this.state.generatedUrl}</a>
+					</div>
+				</div>
 			)
 		}
 		return(
@@ -176,10 +196,6 @@ export default class CostReport extends React.Component{
 	    		<div className="paramAndFilterDivs">
 	    			<ToggleParams addParameter={this.addParameter.bind(this)}/>
 	    			<ToggleFilters addFilter={this.addFilter.bind(this)}/>
-	    		</div>
-	    		<div className="csvDiv">
-	    			<label>CSV Format</label>
-	    			<input type="checkbox" onClick={this.csvReport.bind(this)}/>
 	    		</div>
 	    		<div className="DimensionsMetrics">
 		    		<div>
@@ -203,10 +219,8 @@ export default class CostReport extends React.Component{
 						    />
 				    </div>
 				</div>
-				<DragFrom items={this.state.props} indexVal={this.state.indexVal} passItemBackToParent={this.passItemBackToParent.bind(this)}/>
-				<div className="generatedUrlDiv">
-					{generatedUrl}
-				</div>
+				<DragFrom items={this.state.props} labels={this.state.labels} indexVal={this.state.indexVal} passItemBackToParent={this.passItemBackToParent.bind(this)} passLabelBackToParent={this.passLabelBackToParent.bind(this)}/>
+				{generatedUrl}
 			</div>
 		)
 	}
