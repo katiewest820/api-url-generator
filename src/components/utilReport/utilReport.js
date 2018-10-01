@@ -13,7 +13,7 @@ export default class UtilReport extends React.Component{
 	constructor(){
 		super();
 		this.state = {
-			apiVersion: 'https://app.cloudability.com/api/1/reporting/run?auth_token=[YOUR AUTH TOKEN]', 
+			apiVersion: 'https://app.cloudability.com/api/2/reporting/compare?auth_token=[YOUR AUTH TOKEN]', 
 			props: [],
 			labels: [],
 			indexVal: [],
@@ -111,7 +111,7 @@ export default class UtilReport extends React.Component{
   		if(deletedValue.length > 0){
   			let key = deletedValue.split(":")
   			
-  			if(key[0] == 'dimension'){
+  			if(key[0] == 'dimensions'){
 	  			this.state.selectedDimensionOption.map((item, index)   => {
 	  				
 	  				if(item.value == key[1]){
@@ -139,26 +139,59 @@ export default class UtilReport extends React.Component{
   			}
   		}
   		this.setState({props: items})
-  		let string = items.toString().toLowerCase().replace(/:/g, '=');
-  		let metrics_dimensions = string.replace(/,/g, '&');
-  		this.generateApiUrl(metrics_dimensions)
+  		console.log(items)
+
+  		let checkForSortBy = []; 
+  		let firstReportVal;
+  		let sortByVal = '';
+  		let sortByStatus;
+		for(let i = 0; i < items.length; i++){
+			checkForSortBy.push(items[i].includes('sort_by'))
+			console.log(checkForSortBy)
+			sortByStatus = checkForSortBy.indexOf(true)
+		}
+		console.log(sortByStatus)
+
+		for(let i = 0; i < items.length; i++){
+			if(sortByStatus == -1 && items[i].includes('dimensions') || items[i].includes('metrics')){
+				firstReportVal = items[i].split(':')
+				sortByVal = `&sort_by=${firstReportVal[1]}`
+			}
+			
+		}
+  		
+  		console.log(sortByVal)
+
+  		let string = items.map((item, index) => {
+
+  			if(item.startsWith('start_date') || item.startsWith('end_date') || item.startsWith('offset') || item.startsWith('order')|| item.startsWith('sort_by')){
+  				return item.toLowerCase().replace(/:/g, '=')
+  			}
+  			else{
+  				return item.toLowerCase().replace(/:/g, '[]=')
+  			}
+  		})
+  		//let string = items.toString().toLowerCase().replace(/:/g, '[]=');
+
+  		console.log(string.toString())
+
+  		let metrics_dimensions = string.toString().replace(/,/g, '&');
+  		this.generateApiUrl(metrics_dimensions, sortByVal)
   	}
 
 
   		
-  	generateApiUrl(metrics_dimensions){
+  	generateApiUrl(metrics_dimensions, sortByVal){
   	 	let result = '';
-  		result = `${this.state.apiVersion}/${metrics_dimensions}`
+  		result = `${this.state.apiVersion}&${metrics_dimensions}${sortByVal}`
   		this.setState({generatedUrl: result})
   	}
 
   	csvReport(){
-  		
   		if(this.state.apiVersion.includes('csv')){
-  			console.log('yeahhh')
-  			this.setState({apiVersion: 'https://app.cloudability.com/api/1/reporting/run?auth_token=[YOUR AUTH TOKEN]'})
+  			this.setState({apiVersion: 'https://app.cloudability.com/api/2/reporting/compare?auth_token=[YOUR AUTH TOKEN]'})
   		}else{
-  			this.setState({apiVersion: 'https://app.cloudability.com/api/1/reporting/run.csv?auth_token=[YOUR AUTH TOKEN]'})
+  			this.setState({apiVersion: 'https://app.cloudability.com/api/2/reporting/compare/enqueue.csv?auth_token=[YOUR AUTH TOKEN]'})
   		}	
   		setTimeout(() => {
   			this.passItemBackToParent(this.state.props, "")
@@ -176,13 +209,10 @@ export default class UtilReport extends React.Component{
   		}
   		this.setState({parameter: parameter});
   		this.setState({parameterInput: parameterInput});
-  		console.log(parameter)
-  		console.log(parameterInput)
   		this.selectItems(parameter, parameterInput)
   	}
 
 	render(){
-		
 		let selectedOption = this.state.selectedOption;
 		let generatedUrl = (<div className="generatedUrlDiv"></div>);
 		if(this.state.generatedUrl && this.state.props.length != 0){

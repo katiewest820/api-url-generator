@@ -5,6 +5,7 @@ import CostReport from '../costReport/costReport';
 import UtilReport from '../utilReport/utilReport';
 import Documentation from '../documentation/documentation';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import logo from './cloudy_logo.png';
 
 export default class Main extends React.Component{
 
@@ -14,7 +15,7 @@ export default class Main extends React.Component{
 			<Tabs defaultIndex={1}>
 				<TabList >
 					<Tab disabled={true}>
-						<p><img src="https://image.ibb.co/csLJEd/Image_2018_06_13_at_12_47_29_PM.png" width="100px" /></p>
+						<p><img src={logo} width="100px" /></p>
 					</Tab>
 					<Tab >
 						<p>Documentation</p>

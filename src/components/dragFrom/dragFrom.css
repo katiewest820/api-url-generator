@@ -35,9 +35,9 @@
 	color: white;
 	list-style-type: none !important;
     width: fit-content;
-    padding: 15px;
+    padding: 25px 10px;
     margin: 10px;
-    min-height: 40px !important;
+    text-align: center;
     max-height: fit-content;
     width: 160px;
     border: dotted 1px grey;

@@ -13,7 +13,7 @@ export default class CostReport extends React.Component{
 	constructor(){
 		super();
 		this.state = {
-			apiVersion: 'https://app.cloudability.com/api/1/reporting/cost/run?auth_token=[YOUR AUTH TOKEN]', 
+			apiVersion: 'https://app.cloudability.com/api/2/reporting/compare?auth_token=[YOUR AUTH TOKEN]', 
 			props: [],
 			labels: [],
 			indexVal: [],
@@ -28,7 +28,6 @@ export default class CostReport extends React.Component{
 
 	handleDimensionChange = (selectedDimensionOption) => {
 		let index = selectedDimensionOption.length -1;
-		console.log(selectedDimensionOption)
 		this.state.labels.push(selectedDimensionOption[index].label);
     	this.setState({ selectedDimensionOption: selectedDimensionOption });
     	if(selectedDimensionOption){
@@ -38,9 +37,9 @@ export default class CostReport extends React.Component{
 
   	handleMetricChange = (selectedMetricOption) => {
 		let index = selectedMetricOption.length -1;
-		console.log(selectedMetricOption)
+		
 		this.state.labels.push(selectedMetricOption[index].label);
-		console.log(this.state.labels)
+		
     	this.setState({ selectedMetricOption: selectedMetricOption });
     	if(selectedMetricOption){
     		this.selectItems(selectedMetricOption[index].key, selectedMetricOption[index].value)
@@ -48,8 +47,6 @@ export default class CostReport extends React.Component{
   	}
 
 	selectItems(key, value){
-		console.log(key)
-		console.log(value)
 		//prevents more than two dates - overrides origional date of new date range selected 
 		if(key == 'start_date' || key == 'end_date'){
 			let isThereDate = this.state.props.findIndex( date => {
@@ -105,7 +102,7 @@ export default class CostReport extends React.Component{
   	passItemBackToParent(items, deletedValue){
   		if(deletedValue.length > 0){
   			let key = deletedValue.split(":")
-  			if(key[0] == 'dimension'){
+  			if(key[0] == 'dimensions'){
 	  			this.state.selectedDimensionOption.map((item, index)   => {
 	  				if(item.value == key[1]){
 	  					this.state.selectedDimensionOption.splice(index, 1)
@@ -130,25 +127,50 @@ export default class CostReport extends React.Component{
   			}
   		}
   		this.setState({props: items})
-  		let string = items.toString().toLowerCase().replace(/:/g, '=');
-  		let metrics_dimensions = string.replace(/,/g, '&');
-  		this.generateApiUrl(metrics_dimensions)
+
+  		let checkForSortBy = []; 
+  		let firstReportVal;
+  		let sortByVal = '';
+  		let sortByStatus;
+		for(let i = 0; i < items.length; i++){
+			checkForSortBy.push(items[i].includes('sort_by'))
+			console.log(checkForSortBy)
+			sortByStatus = checkForSortBy.indexOf(true)
+		}
+		console.log(sortByStatus)
+
+		for(let i = 0; i < items.length; i++){
+			if(sortByStatus == -1 && items[i].includes('dimensions') || items[i].includes('metrics')){
+				firstReportVal = items[i].split(':')
+				sortByVal = `&sort_by=${firstReportVal[1]}`
+			}
+			
+		}
+
+  		let string = items.map((item, index) => {
+  			if(item.startsWith('start_date') || item.startsWith('end_date') || item.startsWith('offset') || item.startsWith('order')|| item.startsWith('sort_by')){
+  				return item.toLowerCase().replace(/:/g, '=')
+  			}
+  			else{
+  				return item.toLowerCase().replace(/:/g, '[]=')
+  			}
+  		})
+  		let metrics_dimensions = string.toString().replace(/,/g, '&');
+  		this.generateApiUrl(metrics_dimensions, sortByVal)
   	}
   		
-  	generateApiUrl(metrics_dimensions){
+  	generateApiUrl(metrics_dimensions, sortByVal){
   	 	let result = '';
-  		result = `${this.state.apiVersion}/${metrics_dimensions}`
+  		result = `${this.state.apiVersion}&${metrics_dimensions}${sortByVal}`
   		this.setState({generatedUrl: result})
   	}
 
   	csvReport(){
-  		console.log(this.state.apiVersion)
-  		console.log(this.state.apiVersion.includes('csv'))
+  		
   		if(this.state.apiVersion.includes('csv')){
-  			console.log('yeahhh')
-  			this.setState({apiVersion: 'https://app.cloudability.com/api/1/reporting/run?auth_token=[YOUR AUTH TOKEN]'})
+  			this.setState({apiVersion: 'https://app.cloudability.com/api/2/reporting/compare?auth_token=[YOUR AUTH TOKEN]'})
   		}else{
-  			this.setState({apiVersion: 'https://app.cloudability.com/api/1/reporting/run.csv?auth_token=[YOUR AUTH TOKEN]'})
+  			this.setState({apiVersion: 'https://app.cloudability.com/api/2/reporting/compare/enqueue.csv?auth_token=[YOUR AUTH TOKEN]'})
   		}	
   		setTimeout(() => {
   			this.passItemBackToParent(this.state.props, "")
