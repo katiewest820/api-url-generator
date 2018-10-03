@@ -35,6 +35,7 @@ export default class DatePicker extends React.Component{
     console.log(this.state)
     this.props.addDates(range.start, range.end)
   }
+ 
 
   render() {
     return (
@@ -43,6 +44,8 @@ export default class DatePicker extends React.Component{
         numberOfCalendars={2}
         selectionType='range'
         stateDefinitions={stateDefinitions}
+        minimumNights={0}
+        singleDateRange={true}
         defaultState="available"
         value={this.state.value}
         onSelect={this.handleSelect.bind(this)} 

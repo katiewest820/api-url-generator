@@ -37,13 +37,15 @@ export default class SortableComponent extends React.Component {
       console.log(index)
       let deletedValue = this.state.items[index];
       console.log(deletedValue)
-      this.state.items.splice(index,1);
+      console.log(this.state.items)
+      this.state.items.splice(index, 1);
+      console.log(this.state.items)
       this.state.labels.splice(index, 1);
       this.state.indexVal.splice(index, 1);
       this.setState({
-          items : this.state.items, 
           indexVal: this.state.indexVal,
-          labels: this.state.labels
+          labels: this.state.labels,
+          items : this.state.items,
       });
      
       this.props.passItemBackToParent(this.state.items, deletedValue)

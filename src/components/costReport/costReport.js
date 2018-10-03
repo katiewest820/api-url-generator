@@ -13,7 +13,7 @@ export default class CostReport extends React.Component{
 	constructor(){
 		super();
 		this.state = {
-			apiVersion: 'https://app.cloudability.com/api/2/reporting/compare?auth_token=[YOUR AUTH TOKEN]', 
+			apiVersion: 'https://app.cloudability.com/api/2/reporting/compare/enqueue?auth_token=[YOUR AUTH TOKEN]', 
 			props: [],
 			labels: [],
 			indexVal: [],
@@ -100,6 +100,8 @@ export default class CostReport extends React.Component{
   	}
 
   	passItemBackToParent(items, deletedValue){
+  		console.log(items)
+  		console.log(deletedValue)
   		if(deletedValue.length > 0){
   			let key = deletedValue.split(":")
   			if(key[0] == 'dimensions'){
@@ -116,17 +118,21 @@ export default class CostReport extends React.Component{
 	  					this.setState({selectedMetricOption: this.state.selectedMetricOption})
 	  				}
 	  			});
-  			} else {
-  				this.state.props.map((item, index) => {
-  					let propKey = item.split(":");
-  					if(propKey[1] == key[1]){
-  						this.state.props.splice(index, 1)
-  						this.setState({props: this.state.props})
-  					}
-  				})
-  			}
+  			 } //else {
+  			// 	this.state.props.map((item, index) => {
+  			// 		console.log(item)
+  			// 		let propKey = item.split(":");
+  			// 		console.log(propKey)
+  			// 		if(propKey[1] == key[1]){
+  			// 			this.state.props.splice(index, 1)
+  			// 			this.setState({props: this.state.props})
+  			// 		}
+
+  			// 	})
+  			// }
   		}
   		this.setState({props: items})
+  		console.log(this.state)
 
   		let checkForSortBy = []; 
   		let firstReportVal;
@@ -140,7 +146,7 @@ export default class CostReport extends React.Component{
 		console.log(sortByStatus)
 
 		for(let i = 0; i < items.length; i++){
-			if(sortByStatus == -1 && items[i].includes('dimensions') || items[i].includes('metrics')){
+			if(sortByStatus == -1 && items[i].includes('dimensions') || sortByStatus == -1 && items[i].includes('metrics')){
 				firstReportVal = items[i].split(':')
 				sortByVal = `&sort_by=${firstReportVal[1]}`
 			}
@@ -148,11 +154,12 @@ export default class CostReport extends React.Component{
 		}
 
   		let string = items.map((item, index) => {
-  			if(item.startsWith('start_date') || item.startsWith('end_date') || item.startsWith('offset') || item.startsWith('order')|| item.startsWith('sort_by')){
-  				return item.toLowerCase().replace(/:/g, '=')
+  			console.log(item)
+  			if(item.startsWith('dimensions') || item.startsWith('metrics') || item.startsWith('filters')){
+  				return item.toLowerCase().replace(/:/g, '[]=')
   			}
   			else{
-  				return item.toLowerCase().replace(/:/g, '[]=')
+  				return item.toLowerCase().replace(/:/g, '=')
   			}
   		})
   		let metrics_dimensions = string.toString().replace(/,/g, '&');
@@ -168,7 +175,7 @@ export default class CostReport extends React.Component{
   	csvReport(){
   		
   		if(this.state.apiVersion.includes('csv')){
-  			this.setState({apiVersion: 'https://app.cloudability.com/api/2/reporting/compare?auth_token=[YOUR AUTH TOKEN]'})
+  			this.setState({apiVersion: 'https://app.cloudability.com/api/2/reporting/compare/enqueue?auth_token=[YOUR AUTH TOKEN]'})
   		}else{
   			this.setState({apiVersion: 'https://app.cloudability.com/api/2/reporting/compare/enqueue.csv?auth_token=[YOUR AUTH TOKEN]'})
   		}	

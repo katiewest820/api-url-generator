@@ -33,6 +33,16 @@ export const costDimensions = [
   { value: 'enhanced_service_name', key: 'dimensions', label: 'Service Name', clearableValue: false },
   { value: 'vendor', key: 'dimensions', label: 'Vendor', clearableValue: false },
   { value: 'zone', key: 'dimensions', label: 'Zone', clearableValue: false },
+  { value: 'tag1', key: 'dimensions', label: 'Tag 1', clearableValue: false},
+  { value: 'tag2', key: 'dimensions', label: 'Tag 2', clearableValue: false},
+  { value: 'tag3', key: 'dimensions', label: 'Tag 3', clearableValue: false},
+  { value: 'tag4', key: 'dimensions', label: 'Tag 4', clearableValue: false},
+  { value: 'tag5', key: 'dimensions', label: 'Tag 5', clearableValue: false},
+  { value: 'tagkey1', key: 'dimensions', label: 'Tag Key 1', clearableValue: false},
+  { value: 'tagkey2', key: 'dimensions', label: 'Tag Key 2', clearableValue: false},
+  { value: 'tagkey3', key: 'dimensions', label: 'Tag Key 3', clearableValue: false},
+  { value: 'tagkey4', key: 'dimensions', label: 'Tag Key 4', clearableValue: false},
+  { value: 'tagkey5', key: 'dimensions', label: 'Tag Key 5', clearableValue: false},
 ]
 
 export const utilDimensions = [
@@ -78,4 +88,14 @@ export const utilDimensions = [
   { value: 'product_name', key: 'dimensions', label: 'Product Name', clearableValue: false },
   { value: 'security_group_id', key: 'dimensions', label: 'Security Group ID', clearableValue: false },
   { value: 'security_group_name', key: 'dimensions', label: 'Security Groups Names', clearableValue: false },
+  { value: 'tag1', key: 'dimensions', label: 'Tag 1', clearableValue: false},
+  { value: 'tag2', key: 'dimensions', label: 'Tag 2', clearableValue: false},
+  { value: 'tag3', key: 'dimensions', label: 'Tag 3', clearableValue: false},
+  { value: 'tag4', key: 'dimensions', label: 'Tag 4', clearableValue: false},
+  { value: 'tag5', key: 'dimensions', label: 'Tag 5', clearableValue: false},
+  { value: 'tagkey1', key: 'dimensions', label: 'Tag Key 1', clearableValue: false},
+  { value: 'tagkey2', key: 'dimensions', label: 'Tag Key 2', clearableValue: false},
+  { value: 'tagkey3', key: 'dimensions', label: 'Tag Key 3', clearableValue: false},
+  { value: 'tagkey4', key: 'dimensions', label: 'Tag Key 4', clearableValue: false},
+  { value: 'tagkey5', key: 'dimensions', label: 'Tag Key 5', clearableValue: false},
 ]
