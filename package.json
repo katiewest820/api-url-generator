@@ -5,9 +5,11 @@
   "dependencies": {
     "moment": "^2.22.1",
     "moment-range": "^4.0.1",
-    "react": "^16.3.2",
+    "react": "^16.5.2",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-daterange-picker": "^2.0.0",
     "react-dom": "^16.3.2",
+    "react-notifications": "^1.4.3",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.4",
     "react-select": "^1.2.1",

@@ -7,6 +7,9 @@ import ToggleParams from '../toggleParams/toggleParams';
 import Select from 'react-select';
 import {utilMetrics} from '../metrics_dimensions/metrics';
 import {utilDimensions} from '../metrics_dimensions/dimensions';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import '../../../node_modules/react-notifications/lib/notifications.css';
 import '../../../node_modules/react-select/dist/react-select.css';
 
 export default class UtilReport extends React.Component{
@@ -25,6 +28,17 @@ export default class UtilReport extends React.Component{
 			selectedMetricOption: ''
 		}
 	}
+
+	createNotification = (type) => {
+	    return () => {
+	      	switch (type) {
+	    		case 'success':
+	          		NotificationManager.success('URL Copied!', '', 3000)
+	        	break;
+	      	}
+	    };
+  	};
+
 
 	handleDimensionChange = (selectedDimensionOption) => {
 		
@@ -222,7 +236,12 @@ export default class UtilReport extends React.Component{
 		    		</div>
 					<div >
 						<p>Your API Url:</p>
-						<a href={this.state.generatedUrl} target="_blank">{this.state.generatedUrl}</a>
+						<CopyToClipboard text={this.state.generatedUrl}>
+				            <span onClick={this.createNotification('success')}>
+				            	{this.state.generatedUrl}
+				            </span>
+				        </CopyToClipboard>
+				        <NotificationContainer/>
 					</div>
 				</div>
 			)

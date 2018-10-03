@@ -7,6 +7,9 @@ import ToggleParams from '../toggleParams/toggleParams';
 import Select from 'react-select';
 import {costDimensions} from '../metrics_dimensions/dimensions';
 import {costMetrics} from '../metrics_dimensions/metrics';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
+import '../../../node_modules/react-notifications/lib/notifications.css';
 import '../../../node_modules/react-select/dist/react-select.css';
 
 export default class CostReport extends React.Component{
@@ -34,6 +37,16 @@ export default class CostReport extends React.Component{
     		this.selectItems(selectedDimensionOption[index].key, selectedDimensionOption[index].value)
     	}
   	}
+
+  	createNotification = (type) => {
+	    return () => {
+	      	switch (type) {
+	    		case 'success':
+	          		NotificationManager.success('URL Copied!', '', 3000)
+	        	break;
+	      	}
+	    };
+  	};
 
   	handleMetricChange = (selectedMetricOption) => {
 		let index = selectedMetricOption.length -1;
@@ -214,7 +227,12 @@ export default class CostReport extends React.Component{
 		    		</div>
 					<div >
 						<p>Your API Url:</p>
-						<a href={this.state.generatedUrl} target="_blank">{this.state.generatedUrl}</a>
+						<CopyToClipboard text={this.state.generatedUrl}>
+				            <span onClick={this.createNotification('success')}>
+				            	{this.state.generatedUrl}
+				            </span>
+				        </CopyToClipboard>
+				        <NotificationContainer/>
 					</div>
 				</div>
 			)

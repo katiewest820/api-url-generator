@@ -38,11 +38,16 @@
 	margin-top: 0px;
 }
 
-.generatedUrlDiv a {
-	font-weight: bold;
-	text-decoration: none;
+.generatedUrlDiv span {
+	font-size: 16px;
 	color: #52a8dc;
 }
+
+.generatedUrlDiv span:hover{
+	cursor: pointer;
+	color: #5084ac;
+}
+
 
 .csvDiv{
 	display: grid;
