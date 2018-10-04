@@ -20,7 +20,6 @@ export const costMetrics = [
   { value: 'usage_quantity', key: 'metrics', label: 'Usage Quantity', clearableValue: false },				          
 ]
 
-
 export const utilMetrics = [
   { value: 'avg_cpu_utilization', key: 'metrics', label: 'CPU Utilization (Avg)', clearableValue: false },
   { value: 'inbound_bandwidth', key: 'metrics', label: 'Bandwith In', clearableValue: false },

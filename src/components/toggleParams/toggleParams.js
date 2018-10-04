@@ -38,13 +38,11 @@ export default class ToggleParams extends React.Component {
 	}
 
 	sortBy(value){
-		console.log(value)
 		this.setState({sortParameterInput: value});
 		this.setState({sortParameter: "sort_by"});
 	}
 
 	orderBy(value){
-		console.log(value)
 		this.setState({orderParameterInput: value});
 		this.setState({orderParameter: "order"});
 	}

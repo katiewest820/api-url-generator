@@ -50,9 +50,7 @@ export default class CostReport extends React.Component{
 
   	handleMetricChange = (selectedMetricOption) => {
 		let index = selectedMetricOption.length -1;
-		
 		this.state.labels.push(selectedMetricOption[index].label);
-		
     	this.setState({ selectedMetricOption: selectedMetricOption });
     	if(selectedMetricOption){
     		this.selectItems(selectedMetricOption[index].key, selectedMetricOption[index].value)
@@ -67,10 +65,10 @@ export default class CostReport extends React.Component{
 	  			return key == itemKey[0]
 			});
 			if(isThereDate != -1){
-				this.state.props.splice(isThereDate, 1)
-				this.state.labels.splice(isThereDate, 1)
-				this.setState({props: this.state.props})
-				this.setState({labels: this.state.labels})
+				this.state.props.splice(isThereDate, 1);
+				this.state.labels.splice(isThereDate, 1);
+				this.setState({props: this.state.props});
+				this.setState({labels: this.state.labels});
 			}
 			this.state.props.push(`${key}:${value}`);
   			this.state.labels.push(`${key}:${value}`);
@@ -78,13 +76,13 @@ export default class CostReport extends React.Component{
 		}else {
 	  		this.state.props.push(`${key}:${value}`);
 	  	}
-	  		//this.state.labels.push(`${key}:${value}`);
-	  		let nextIndexVal;
+
+	  	let nextIndexVal;
     	if(this.state.props.length > 0){
     		let nextIndexVal = this.state.props.length -1;
-      		this.state.indexVal.push(nextIndexVal)
+      		this.state.indexVal.push(nextIndexVal);
 	  	}
-	  	this.passItemBackToParent(this.state.props, "")
+	  	this.passItemBackToParent(this.state.props, "");
   	}
 
   	addFilter(key, value, filter){
@@ -97,14 +95,13 @@ export default class CostReport extends React.Component{
 		let nextIndexVal = this.state.props.length -1;
 		this.state.indexVal.push(nextIndexVal);
 		this.passItemBackToParent(this.state.props, "");
-		
   	}
 
   	addDates(start, end){
-  		let startDate = Moment(start).format('YYYY-MM-DD')
-  		let endDate = Moment(end).format('YYYY-MM-DD')
-  		this.selectItems('start_date', startDate)
-  		this.selectItems('end_date', endDate)
+  		let startDate = Moment(start).format('YYYY-MM-DD');
+  		let endDate = Moment(end).format('YYYY-MM-DD');
+  		this.selectItems('start_date', startDate);
+  		this.selectItems('end_date', endDate);
   	}
 
   	passLabelBackToParent(labels, indexVal){
@@ -113,39 +110,25 @@ export default class CostReport extends React.Component{
   	}
 
   	passItemBackToParent(items, deletedValue){
-  		console.log(items)
-  		console.log(deletedValue)
   		if(deletedValue.length > 0){
-  			let key = deletedValue.split(":")
+  			let key = deletedValue.split(":");
   			if(key[0] == 'dimensions'){
-	  			this.state.selectedDimensionOption.map((item, index)   => {
+	  			this.state.selectedDimensionOption.map((item, index) => {
 	  				if(item.value == key[1]){
-	  					this.state.selectedDimensionOption.splice(index, 1)
-	  					this.setState({selectedDimensionOption: this.state.selectedDimensionOption})
+	  					this.state.selectedDimensionOption.splice(index, 1);
+	  					this.setState({selectedDimensionOption: this.state.selectedDimensionOption});
 	  				}
 	  			})
   			}else if(key[0] == 'metrics'){
   				this.state.selectedMetricOption.map((item, index)   => {
 	  				if(item.value == key[1]){
-	  					this.state.selectedMetricOption.splice(index, 1)
-	  					this.setState({selectedMetricOption: this.state.selectedMetricOption})
+	  					this.state.selectedMetricOption.splice(index, 1);
+	  					this.setState({selectedMetricOption: this.state.selectedMetricOption});
 	  				}
 	  			});
-  			 } //else {
-  			// 	this.state.props.map((item, index) => {
-  			// 		console.log(item)
-  			// 		let propKey = item.split(":");
-  			// 		console.log(propKey)
-  			// 		if(propKey[1] == key[1]){
-  			// 			this.state.props.splice(index, 1)
-  			// 			this.setState({props: this.state.props})
-  			// 		}
-
-  			// 	})
-  			// }
+  			} 
   		}
   		this.setState({props: items})
-  		console.log(this.state)
 
   		let checkForSortBy = []; 
   		let checkForOffset = [];
@@ -161,17 +144,10 @@ export default class CostReport extends React.Component{
 			checkForSortBy.push(items[i].includes('sort_by'))
 			checkForOffset.push(items[i].includes('offset'))
 			checkForMaxResults.push(items[i].includes('max_results'))
-
-			console.log(checkForSortBy)
-			console.log(checkForOffset)
-			console.log(checkForMaxResults)
 			sortByStatus = checkForSortBy.indexOf(true)
 			maxResultsStatus = checkForMaxResults.indexOf(true)
 			offsetStatus = checkForOffset.indexOf(true)
 		}
-		console.log(sortByStatus)
-		console.log(maxResultsStatus)
-		console.log(offsetStatus)
 
 		for(let i = 0; i < items.length; i++){
 			if(sortByStatus == -1 && items[i].includes('dimensions') || sortByStatus == -1 && items[i].includes('metrics')){
@@ -181,40 +157,38 @@ export default class CostReport extends React.Component{
 		}
 
 		if(offsetStatus == -1 ){
-			offsetVal = '&offset=0'
+			offsetVal = '&offset=0';
 		}
 		if(maxResultsStatus == -1){
-			maxResultsVal = '&max_results=0'
+			maxResultsVal = '&max_results=0';
 		}
 
   		let string = items.map((item, index) => {
-  			console.log(item)
   			if(item.startsWith('dimensions') || item.startsWith('metrics') || item.startsWith('filters')){
-  				return item.toLowerCase().replace(/:/g, '[]=')
+  				return item.toLowerCase().replace(/:/g, '[]=');
   			}
   			else{
-  				return item.toLowerCase().replace(/:/g, '=')
+  				return item.toLowerCase().replace(/:/g, '=');
   			}
   		})
   		let metrics_dimensions = string.toString().replace(/,/g, '&');
-  		this.generateApiUrl(metrics_dimensions, sortByVal, maxResultsVal, offsetVal)
+  		this.generateApiUrl(metrics_dimensions, sortByVal, maxResultsVal, offsetVal);
   	}
   		
   	generateApiUrl(metrics_dimensions, sortByVal, maxResultsVal, offsetVal){
   	 	let result = '';
-  		result = `${this.state.apiVersion}&${metrics_dimensions}${sortByVal}${maxResultsVal}${offsetVal}`
-  		this.setState({generatedUrl: result})
+  		result = `${this.state.apiVersion}&${metrics_dimensions}${sortByVal}${maxResultsVal}${offsetVal}`;
+  		this.setState({generatedUrl: result});
   	}
 
   	csvReport(){
-  		
   		if(this.state.apiVersion.includes('csv')){
-  			this.setState({apiVersion: 'https://app.cloudability.com/api/2/reporting/compare/enqueue?auth_token=[YOUR AUTH TOKEN]'})
+  			this.setState({apiVersion: 'https://app.cloudability.com/api/2/reporting/compare/enqueue?auth_token=[YOUR AUTH TOKEN]'});
   		}else{
-  			this.setState({apiVersion: 'https://app.cloudability.com/api/2/reporting/compare/enqueue.csv?auth_token=[YOUR AUTH TOKEN]'})
+  			this.setState({apiVersion: 'https://app.cloudability.com/api/2/reporting/compare/enqueue.csv?auth_token=[YOUR AUTH TOKEN]'});
   		}	
   		setTimeout(() => {
-  			this.passItemBackToParent(this.state.props, "")
+  			this.passItemBackToParent(this.state.props, "");
   		}, 200)
   	}
 
@@ -229,14 +203,10 @@ export default class CostReport extends React.Component{
   		}
   		this.setState({parameter: parameter});
   		this.setState({parameterInput: parameterInput});
-  		
-  		console.log(parameter)
-  		console.log(parameterInput)
-  		this.selectItems(parameter, parameterInput)
+  		this.selectItems(parameter, parameterInput);
   	}
 
 	render(){
-		console.log(this.state.props)
 		let selectedOption = this.state.selectedOption;
 		let generatedUrl = (<div className="generatedUrlDiv"></div>);
 		if(this.state.generatedUrl && this.state.props.length != 0){

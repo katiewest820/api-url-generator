@@ -20,7 +20,6 @@ export default class ToggleFilters extends React.Component {
 		this.setState({active: false});
 	}
 
-	
 	render(){
 		if(this.state.active == true){
 			let dimensionsDataSource;
@@ -70,13 +69,13 @@ export default class ToggleFilters extends React.Component {
 	    			
 	    		</div>
 	    		</div>
-	    	)} else {
-	    		return(
-	    			<div onClick={e => this.setState({active: true})} className="addFilterButton">
-	    				<p>Add Filter</p>
-	    				<i className="fa fa-plus-circle fa-2x"></i>
-	    			</div>)
-	    	}
-		
+	    )} else {
+	    	return(
+    			<div onClick={e => this.setState({active: true})} className="addFilterButton">
+    				<p>Add Filter</p>
+    				<i className="fa fa-plus-circle fa-2x"></i>
+    			</div>
+    		)
+	    }
 	}
 }

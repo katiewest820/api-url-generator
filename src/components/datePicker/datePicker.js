@@ -22,20 +22,15 @@ export default class DatePicker extends React.Component{
 			value: null,
 			states: ''
 		}
-		console.log(this.props)
 	}
 
   handleSelect(range, states) {
-  	console.log(range)
-  	console.log(states)
     this.setState({
       value: range,
       states: states,
     });
-    console.log(this.state)
-    this.props.addDates(range.start, range.end)
+    this.props.addDates(range.start, range.end);
   }
- 
 
   render() {
     return (
