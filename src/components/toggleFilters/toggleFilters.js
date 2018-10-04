@@ -1,6 +1,6 @@
 import React from 'react';
-import {costMetrics} from '../metrics_dimensions/metrics';
-import {costDimensions} from '../metrics_dimensions/dimensions';
+import {costMetrics, utilMetrics} from '../metrics_dimensions/metrics';
+import {costDimensions, utilDimensions} from '../metrics_dimensions/dimensions';
 import './toggleFilters.css';
 
 export default class ToggleFilters extends React.Component {
@@ -10,7 +10,8 @@ export default class ToggleFilters extends React.Component {
 			active: false,
 			parameter: '',
 			selectedFilter: '',
-			parameterInput: ''
+			parameterInput: '',
+			reportType: props.reportType
 		}
 	}
 
@@ -22,10 +23,19 @@ export default class ToggleFilters extends React.Component {
 	
 	render(){
 		if(this.state.active == true){
-			let filterDimensionOptions = costDimensions.map((item, index) => {
+			let dimensionsDataSource;
+			let metricsDataSource;
+			if(this.state.reportType == 'cost'){
+				dimensionsDataSource = costDimensions;
+				metricsDataSource = utilDimensions;
+			}else{
+				dimensionsDataSource = utilDimensions;
+				metricsDataSource = utilMetrics;
+			}
+			let filterDimensionOptions = dimensionsDataSource.map((item, index) => {
 	    		return <option value={item.value} onClick={e => this.setState({parameter: e.target.value})}>{item.label}</option>
 			})
-			let filterMetricOptions = costMetrics.map((item, index) => {
+			let filterMetricOptions = metricsDataSource.map((item, index) => {
 				return <option value={item.value} onClick={e => this.setState({parameter: e.target.value})}>{item.label}</option>
 			})
 			return(
@@ -39,8 +49,8 @@ export default class ToggleFilters extends React.Component {
 					<label>Measure</label>
 	    			<select value={this.state.parameter} onChange={e => this.setState({parameter: e.target.value})}>
 	    				<option disabled></option>
-	    				{filterDimensionOptions}
 	    				{filterMetricOptions}
+	    				{filterDimensionOptions}
 	    			</select>
 	    			<label>Operator</label>
 	    			<select value={this.state.selectedFilter} onChange={e => this.setState({selectedFilter: e.target.value})}>

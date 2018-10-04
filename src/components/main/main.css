@@ -29,6 +29,10 @@
 	margin: 30px;
 }
 
+.Select-clear-zone{
+	display: none!important;
+}
+
 .generatedUrlDiv{
 	min-height: 120px;
 	max-height: fit-content;
@@ -41,6 +45,7 @@
 .generatedUrlDiv span {
 	font-size: 16px;
 	color: #52a8dc;
+	word-wrap: break-word;
 }
 
 .generatedUrlDiv span:hover{

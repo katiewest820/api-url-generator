@@ -148,22 +148,43 @@ export default class CostReport extends React.Component{
   		console.log(this.state)
 
   		let checkForSortBy = []; 
+  		let checkForOffset = [];
+  		let checkForMaxResults = [];
   		let firstReportVal;
   		let sortByVal = '';
+  		let offsetVal = '';
+  		let maxResultsVal = '';
   		let sortByStatus;
+  		let maxResultsStatus;
+  		let offsetStatus;
 		for(let i = 0; i < items.length; i++){
 			checkForSortBy.push(items[i].includes('sort_by'))
+			checkForOffset.push(items[i].includes('offset'))
+			checkForMaxResults.push(items[i].includes('max_results'))
+
 			console.log(checkForSortBy)
+			console.log(checkForOffset)
+			console.log(checkForMaxResults)
 			sortByStatus = checkForSortBy.indexOf(true)
+			maxResultsStatus = checkForMaxResults.indexOf(true)
+			offsetStatus = checkForOffset.indexOf(true)
 		}
 		console.log(sortByStatus)
+		console.log(maxResultsStatus)
+		console.log(offsetStatus)
 
 		for(let i = 0; i < items.length; i++){
 			if(sortByStatus == -1 && items[i].includes('dimensions') || sortByStatus == -1 && items[i].includes('metrics')){
 				firstReportVal = items[i].split(':')
 				sortByVal = `&sort_by=${firstReportVal[1]}`
 			}
-			
+		}
+
+		if(offsetStatus == -1 ){
+			offsetVal = '&offset=0'
+		}
+		if(maxResultsStatus == -1){
+			maxResultsVal = '&max_results=0'
 		}
 
   		let string = items.map((item, index) => {
@@ -176,12 +197,12 @@ export default class CostReport extends React.Component{
   			}
   		})
   		let metrics_dimensions = string.toString().replace(/,/g, '&');
-  		this.generateApiUrl(metrics_dimensions, sortByVal)
+  		this.generateApiUrl(metrics_dimensions, sortByVal, maxResultsVal, offsetVal)
   	}
   		
-  	generateApiUrl(metrics_dimensions, sortByVal){
+  	generateApiUrl(metrics_dimensions, sortByVal, maxResultsVal, offsetVal){
   	 	let result = '';
-  		result = `${this.state.apiVersion}&${metrics_dimensions}${sortByVal}`
+  		result = `${this.state.apiVersion}&${metrics_dimensions}${sortByVal}${maxResultsVal}${offsetVal}`
   		this.setState({generatedUrl: result})
   	}
 
@@ -241,8 +262,8 @@ export default class CostReport extends React.Component{
 			<div className="reportBuildDiv">
 	    		<DatePicker addDates={this.addDates.bind(this)}/>
 	    		<div className="paramAndFilterDivs">
-	    			<ToggleParams addParameter={this.addParameter.bind(this)}/>
-	    			<ToggleFilters addFilter={this.addFilter.bind(this)}/>
+	    			<ToggleParams reportType='cost' addParameter={this.addParameter.bind(this)}/>
+	    			<ToggleFilters reportType='util' addFilter={this.addFilter.bind(this)}/>
 	    		</div>
 	    		<div className="DimensionsMetrics">
 		    		<div>

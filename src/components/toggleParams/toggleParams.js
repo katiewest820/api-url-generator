@@ -1,7 +1,7 @@
 import React from 'react';
 import './toggleParams.css';
-import {costMetrics} from '../metrics_dimensions/metrics';
-import {costDimensions} from '../metrics_dimensions/dimensions';
+import {costMetrics, utilMetrics} from '../metrics_dimensions/metrics';
+import {costDimensions, utilDimensions} from '../metrics_dimensions/dimensions';
 
 export default class ToggleParams extends React.Component {
 	constructor(props){
@@ -13,7 +13,8 @@ export default class ToggleParams extends React.Component {
 			orderParameter: '',
 			orderParameterInput: '',
 			parameter: '',
-			parameterInput: ''
+			parameterInput: '',
+			reportType: props.reportType
 		}
 	}
 
@@ -50,10 +51,19 @@ export default class ToggleParams extends React.Component {
 
 	render(){
 		if(this.state.active == true){
-			let filterDimensionOptions = costDimensions.map((item, index) => {
+			let dimensionsDataSource;
+			let metricsDataSource;
+			if(this.state.reportType == 'cost'){
+				dimensionsDataSource = costDimensions;
+				metricsDataSource = costMetrics;
+			}else{
+				dimensionsDataSource = utilDimensions;
+				metricsDataSource = utilMetrics;
+			}
+			let filterDimensionOptions = dimensionsDataSource.map((item, index) => {
 	    		return <option value={item.value} >{item.label}</option>
 			})
-			let filterMetricOptions = costMetrics.map((item, index) => {
+			let filterMetricOptions = metricsDataSource.map((item, index) => {
 				return <option value={item.value} >{item.label}</option>
 			})
 			return(
