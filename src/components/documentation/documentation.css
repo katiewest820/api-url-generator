@@ -1,0 +1,18 @@
+.docsDiv{
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	justify-items: center;
+	margin: 30px 25%;
+	grid-gap: 10px;
+
+}
+
+.docsDiv p{
+	font-size: 18px;
+    text-decoration: underline;
+    margin: 5px;
+}
+
+.v2, .additional{
+	grid-column: span 2;
+}
