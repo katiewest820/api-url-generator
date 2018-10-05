@@ -4,13 +4,21 @@
 	justify-items: center;
 	margin: 30px 25%;
 	grid-gap: 10px;
-
+	color: #747c84;
 }
 
 .docsDiv p{
-	font-size: 18px;
-    text-decoration: underline;
+	font-size: 19px;
     margin: 5px;
+}
+
+.v2{
+	border-bottom: 1px solid #747c84;
+}
+
+.docsDiv a{
+	text-decoration: none;
+    color: black;
 }
 
 .v2, .additional{

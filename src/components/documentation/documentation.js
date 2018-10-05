@@ -17,7 +17,7 @@ export default class Documentation extends React.Component{
 					</ul>
 				</div>
 				<div className="additional">
-					<p>Additional Resources:</p>
+					<p>Additional Resources</p>
 				</div>
 				<div className="v1">
 					<span>The Cloudability <a href='https://developers.cloudability.com/v1.0/docs/cloudability-api-v1' target="_blank">V1 API</a> supports the following features:</span>
